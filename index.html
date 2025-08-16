@@ -1,0 +1,1256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MEMORIA</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>    
+<style>
+
+  html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+h2 {
+       font-size: 12px;
+  font-family:monospace;
+  font-weight: bold;
+  line-height: 2;
+  color: rgb(0, 0, 0);
+   margin: 1px;   /* elimina espacio extra arriba y abajo */
+  padding: 1px;
+    }
+
+
+h3 {
+       font-size: 18px;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  color: rgb(0, 0, 0);
+  text-decoration: underline;
+   margin: 1px;   /* elimina espacio extra arriba y abajo */
+  padding: 1px;
+    }
+
+h4 {
+       font-size: 13px;
+  font-family: 'Courier New', Courier;
+  font-weight: bold;  
+  line-height: 1.5;
+  text-align: justify;
+  color: rgb(0, 0, 0);
+    }
+
+
+    h5 {
+       font-size: 13px;
+  font-family: Arial, sans-serif;
+  font-weight: light;  
+  line-height: 0;
+  text-align: justify;
+  color: rgb(0, 0, 0);
+    }
+
+
+#mapa {        /* ya no es fixed */
+  height: 100dvh; 
+ margin: 0;
+  padding: 0;
+
+             /* margen arriba, abajo y lados */
+}
+
+
+#info-titulo {
+
+  position: fixed;
+  top: 2%;
+  right: 42%;
+  width: auto;
+  height: auto;
+  max-height: 85%;
+  border: 2px solid #050101;
+  background: rgba(255, 255, 255, 0.411);
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 10px;
+  box-shadow: -2px 0 5px rgba(0,0,0,0.3);
+  z-index: 1000;
+;
+}
+
+
+#info-leyenda {
+  display: flex; 
+    flex-direction: row;              /* pone los .item en una fila */
+  align-items: center;  
+    justify-content: flex-start;    /* centra verticalmente */
+  gap: 40px;    
+    flex-wrap: nowrap;  
+  position: fixed;
+  top: 90%;
+  right:38%;
+  width: auto;
+  height: 5%;
+  max-height: 85%;
+  border: 2px solid #050101;
+  background: rgba(255, 255, 255, 0.908);
+  padding: 0px;
+  padding-top: 1px;
+  padding-bottom: 2px;
+  padding-left: 15px;
+  padding-right: 15px;
+  border-radius: 10px;
+  box-shadow: -2px 0 5px rgba(0,0,0,0.3);
+  z-index: 1000;
+;
+}
+
+#info-leyenda .item {
+    display: inline-flex;    /* icono + texto en fila */
+  flex-direction: row ;
+  align-items: center;
+  gap: 10px;                          /* espacio icono-texto */
+  white-space: nowrap;                    /* Espacio entre icono y texto */
+}
+
+#info-leyenda .item:nth-child(2) {
+  margin-left: 50px; /* ajusta este valor según lo lejos que lo quieras */
+}
+
+#info-leyenda img {
+  width: 20px;
+  height: auto;
+}
+
+#info-logo {
+
+  position: fixed;
+  top: 0%;
+  right: 83%;
+  width: 180px;
+  height: auto;
+  max-height: 85%;
+  background: rgba(255, 255, 255, 0);
+  padding: 1px;
+  z-index: 1000;
+;
+}
+
+#info-frase {
+
+  position: fixed;
+  top: 74%;
+  text-align: center;
+  right: auto;
+  width: 500px;
+  height: auto;
+  margin-left: 25px;
+  z-index: 1000;
+;
+}
+
+#info-panel {
+  position: absolute;
+  top: 30px;
+  right: 20px;
+  width: 33%;
+  max-width: 100%;
+  height: auto;
+  max-height: 85%;
+  border: 2px solid #050101;
+  background: white;
+  overflow-y: auto;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  display: none;
+  opacity: 0;
+  transform: translateX(20px);
+  transition: all 0.3s ease;
+
+}
+#info-panel.open {
+  display: block;
+  opacity: 1;
+  transform: translateX(0);
+}
+
+#info-panel a {
+  color: inherit;          /* Hereda el color del texto del elemento padre */
+  text-decoration: underline; /* Mantiene el subrayado si quieres */
+}
+
+#info-panel a:hover {
+  color: inherit;          /* Mantiene el color al pasar el ratón */
+  text-decoration: underline; /* O puedes cambiarlo a none si no quieres subrayado */
+}
+
+#close-btn {
+    position: absolute;
+  display: block;
+  margin-bottom: 0px;
+  right: 10px;  
+  cursor: pointer;
+  background: #1b2734;
+  color: white;
+  padding: 0.5x 3px;
+  border-radius: 10px;
+
+}
+
+#panel-tabs {
+  position:sticky;
+  bottom:0;
+  background: rgba(255, 255, 255, 0);
+  text-align: center;
+  margin-top: 10px;
+}
+
+.tab-dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  background: #bbb;
+  border-radius: 50%;
+  margin: 0 5px;
+  cursor: pointer;
+}
+
+.tab-dot.active {
+  background: #1b2734; /* Color del punto activo */
+}
+
+.panel-page {
+  display: none;
+}
+.panel-page.active {
+  display: block;
+}
+
+
+@media (max-width: 768px) {
+    #info-panel {
+        width: 100%;
+        right: 0;
+        top: 0;
+        max-height: 100%;
+        border-radius: 0;
+    }
+  }
+ 
+
+
+</style>
+</head>
+<body>
+  
+    <div id="mapa"style></div>
+    <div id="info-titulo"><h3>Mapa de la Memoria</h3></div>
+     <div id="info-logo"><img src="./Casa_memoria.png" alt="Casa de la Memoria" style="width:100%; border-radius:8px; margin-top:10px;"></div>
+    <div id="info-frase"> <h2>"Es vital entender que ellos no son solo una fotografía en una pancarta: eran seres humanos,
+      personas sensibles, de carne y hueso, como usted, como yo, que tenían hermosos sueños y por eso fueron considerados peligrosos<br>
+      <br>¿Era neccesario para los que detentan el poder hacerlos desaparecer como si nunca hubieran existido?"<br>
+    <p style="text-align: right;">- Ana Gonzalez de Recabarren</p> </h2></div>
+    <div id="info-leyenda">
+  <div class="item">
+    <img src="./clavel.png" alt="Memorial"> <span><h5>Sitio de Memoria</h5></span></div>  
+    <div class="item"><img src="./detenido.png" alt="Centro de detención"><span><h5>Centro de detención</h5></span>
+  </div>
+</div>
+
+ <div id="info-panel">
+    <button id="close-btn">x</button>
+  <!-- Contenido -->
+  <div id="page1" class="panel-page active">
+    <div id="info-content"></div>
+  </div>
+  <div id="page2" class="panel-page">
+    <div id="extra-content"></div>
+  </div>
+  <div id="page3" class="panel-page">
+    <div id="third-content"></div>
+  </div>
+  <div id="page4" class="panel-page">
+    <div id="fourth-content"></div>
+  </div>
+
+      <div id="panel-tabs">
+    <span class="tab-dot active" data-tab="page1"></span>
+    <span class="tab-dot" data-tab="page2"></span>
+    <span class="tab-dot" data-tab="page3"></span>
+    <span class="tab-dot" data-tab="page4"></span>
+  </div>
+
+</div>
+ 
+  
+<script>
+// Inicio mapa
+var mapa = L.map('mapa').setView([-40, -72.8], 9);
+// Capa OSM
+var osm =   L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_toner_lite/{z}/{x}/{y}{r}.{ext}', {
+	minZoom: 9,
+	maxZoom: 20,
+	attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+	ext: 'png'
+});
+osm.addTo(mapa);
+
+// Alternar entre páginas al pulsar botones
+document.querySelectorAll('.tab-dot').forEach(dot => {dot.addEventListener('click', () => {
+    // Ocultar todas
+    document.querySelectorAll('.panel-page').forEach(page => {page.classList.remove('active');
+    document.querySelectorAll('.tab-dot').forEach(d => d.classList.remove('active'));
+});
+    // Mostrar la seleccionada
+    const tab = dot.getAttribute('data-tab');
+    document.getElementById(tab).classList.add('active');
+    dot.classList.add('active');
+  });
+});
+
+
+// Función para abrir panel con dos contenidos
+function openPanel(content1, content2, content3, content4) {
+  const panel = document.getElementById('info-panel');
+  document.getElementById('info-content').innerHTML = content1 || '';
+  document.getElementById('extra-content').innerHTML = content2|| '';
+  document.getElementById('third-content').innerHTML = content3 || '';
+  document.getElementById('fourth-content').innerHTML = content4 || '';
+  panel.classList.add('open');
+  document.querySelectorAll('.panel-page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page1').classList.add('active');
+  // Activar el punto de la página 1
+  document.querySelectorAll('.tab-dot').forEach(d => d.classList.remove('active'));
+  document.querySelector('.tab-dot[data-tab="page1"]').classList.add('active');
+}
+// Cerrar panel
+document.getElementById('close-btn').addEventListener('click', () => {
+    document.getElementById('info-panel').classList.remove('open'); // cerrar con clase
+});
+
+const titulo = document.getElementById('info-titulo');
+titulo.style.position = 'fixed';
+  titulo.style.display = 'block';
+
+  const leyenda = document.getElementById('info-leyenda');
+leyenda.style.position = 'fixed';
+  leyenda.style.display = 'block';
+
+var memorial = L.icon({ iconUrl: './clavel.png', iconSize: [35, 35],
+ popupAnchor: [-1, -10]
+});
+
+
+var CCDD = L.icon({ iconUrl: './detenido.png', iconSize: [25, 25],
+ popupAnchor: [-1, -10]
+});
+
+
+
+
+
+var marker = L.marker([-39.817309, -73.246849], {icon: memorial}).addTo(mapa); 
+marker.on('click', function() {
+    openPanel( `<h3>Recinto CNI / Casa de la Memoria<h3>
+
+    <img src="./Casa_memoria.png" alt="Casa de la Memoria" style="width:100%; border-radius:8px; margin-top:10px;">
+
+    <h4>Ubicado en calle Pérez Rosales 764
+<br>Hubo testimonios de ex presos políticos que denunciaron haber estado en este recinto,
+ubicado en Pérez Rosales 764 en Valdivia, entre los años 1981 y 1988. La mayor cantidad
+de detenidos en este lugar se consignó en el año 1986.<br>
+<br>De acuerdo a los testimonios recibidos, esta Comisión pudo establecer que, luego de
+ser detenidos por este organismo de seguridad, los presos eran conducidos hasta el
+subterráneo de este recinto, en donde fueron sometidos a interrogatorios y torturas,
+permanentemente vendados, amarrados y desnudos. Se encontraban incomunicados sin comida, agua ni condiciones higiénicas mínimas. <br>
+<br>También consta que fueron conducidos luego de su detención a recintos de la CNI en
+Niebla (en noviembre de 1984), y otros a un recinto CNI en caleta Miramar, Pelluco,
+(noviembre de 1988), en Puerto Montt. No fue posible, sin embargo, obtener más antecedentes respecto a estos lugares. </h4>`,
+
+   `
+      <h3>Galería de imágenes</h3>
+      <div style="display:flex; flex-direction:column; gap:10px;">
+        <img src="./Casa_memoria.png" alt="Casa de la Memoria 1" style="width:100%; border-radius:8px;">
+        <img src="./Clavel.png" alt="Casa de la Memoria 2" style="width:100%; border-radius:8px;">
+        <img src="./foto3.jpg" alt="Casa de la Memoria 3" style="width:100%; border-radius:8px;">
+      </div>`,
+    
+    `<h3> Testimonios </h3>`);
+});
+ 
+
+// Valdivia
+
+ var marker = L.marker([-39.814784, -73.258046], {icon: CCDD}).addTo(mapa)
+ ;marker.on('click', function() {
+    openPanel( `<h3>Retén Isla Teja<h3>
+<h4>
+    <br> El Retén de Carabineros, Isla Teja fue utilizado para la detencion de presos politcos de la region.<h4>`
+ )
+ });;
+
+ var marker = L.marker([-39.813046, -73.263345], {icon: CCDD}).addTo(mapa)
+ ;marker.on('click', function() {
+    openPanel(`<h3>Carcel Isla Teja<h3>
+<h4>
+ Hoy Sitio de Memoria Complejo Penitenciario Ex Cárcel de Isla Teja <br>
+ <br>En este recinto, ubicado en la Isla Teja, se concentraron los detenidos políticos en el
+año 1973, y en menor número hasta el año 1989.<br>
+Los testimonios consignan que se trataba de un edificio de construcción nueva, inaugurado en 1973. 
+Hombres y mujeres permanecían separados. En 1973 los prisioneros
+políticos no tenían permiso para ver a sus familiares ni para trabajar. Con el tiempo esta
+situación cambió y se permitieron las visitas los días sábado y facilidades para trabajar
+en un taller de carpintería.<br>
+<br>Los detenidos llegaban en su mayoría en muy malas condiciones físicas y anímicas,
+debido a que desde el mismomomento de su detención eran sometidos a malos tratos
+e intensos interrogatorios. Ellos procedían de los diversos retenes y comisarías de la
+provincia, así como de recintos militares habilitados para este propósito.
+<br>Los detenidos eran sacados del penal durante la noche, por personal del Servicio de
+Inteligencia Militar (SIM), que los trasladaban a otros recintos en los cuales eran interrogados y torturados.
+ Los sitios de tortura más frecuentes, según los testimonios, eran
+el Regimiento Cazadores, en cuyo interior funcionaba la Fiscalía Militar, y el cuartel
+del Servicio de Inteligencia Militar (SIM) de calle Errázuriz. Volvían a la cárcel en muy
+malas condiciones. En el traslado eran también golpeados y amenazados, muchas veces
+vendados y amarrados.<h4>`, { maxWidth: 600 })
+ });;
+ 
+ var marker = L.marker([-39.817372, -73.235384], {icon: CCDD}).addTo(mapa)
+ ;marker.on('click', function() {
+    openPanel(`<h3>Primera Comisaria de Valdivia / Fiscalia de Carabineros<h3>
+<h4>
+ El mayor número de detenidos se concentró durante 1973. Los declarantes señalaron que
+se trataba de un recinto de reclusión transitorio. Muchos de los detenidos provenían de
+otros retenes y comisarías de pueblos y ciudades de la provincia. Luego de permanecer
+por un breve período en ese lugar, fueron trasladados a otros, en la misma ciudad de
+Valdivia.<br>
+<br> Cabe señalar que en el mismo recinto, en otras dependencias, funcionó el Servicio de
+Inteligencia de Carabineros (SICAR), que también mantuvo detenidos.<h4>`, { maxWidth: 600 } )
+ });;
+
+ var marker = L.marker([-39.820803, -73.230224], {icon: CCDD}).addTo(mapa)
+ ;marker.on('click', function() {
+    openPanel(`<h3>Recinto SIM "Palacio de la Risa" <h3>
+<h4>
+Estaba ubicado en Av. Ramón Picarte N° 1451. Funcionó entre septiembre de 1973
+y el año 1975.
+Los detenidos provenían de la ciudad de Valdivia y de otras comunas de la provincia. Unos
+permanecían vendados y amarrados y otros en calabozos sin alimento ni agua. Luego, la mayoría era trasladada a otros centros de reclusión, principalmente a la cárcel. Los testimonios
+dieron cuenta de diversos tormentos físicos y psicológicos. Sufrieron golpes, aplicación de
+electricidad, amenazas, simulacros de fusilamiento, colgamientos y el submarino.<h4>`, { maxWidth: 600 })
+ });;
+
+ var marker = L.marker([-39.823330, -73.231886],  {icon: CCDD}).addTo(mapa)
+ ;marker.on('click', function() {
+    openPanel(`<h3>IV División del Ejército / Guarnición Militar<h3>
+<h4>
+La IV División Del Ejército / Guarnición Militar, Valdivia fue un recinto de reclusión transitoria, 
+utilizado principalmente para interrogatorios y torturas.
+<br> Los detenidos ingresaron luego de presentarse por haber sido llamados a través de bandos u otros medios, 
+o bien luego de haber sido detenidos en sus hogares, centros de trabajo o de estudio. Unos pocos pasaron previamente por retenes de carabineros.
+<br> Algunos testimonios refieren que fueron llevados a este lugar desde la Cárcel de Valdivia, 
+en donde permanecían detenidos. Los testimonios dan cuenta que fueron sometidos a golpes, 
+en ocasiones con paleta de madera, amenazas, simulacro de fusilamiento, y prolongadas posiciones forzadas.<h4>`,{ maxWidth: 600 })
+ });;
+
+ var marker = L.marker([-39.827105, -73.231834],  {icon: CCDD}).addTo(mapa)
+ ;marker.on('click', function() {
+    openPanel(`<h3>Regimiento Cuartel Bueras <h3>
+<h4>
+ En este recinto funcionaron el Regimiento de Telecomunicaciones Nº4
+Membrillar, el Regimiento Caballería Blindada N°2 Cazadores, el Regimiento de
+Artillería N°2 Maturana y la Fiscalía Militar de Valdivia <br>
+<br>
+Según antecedentes recabados por la Comisión Valech el mayor número de
+detenidos en los recintos militares de la ciudad de Valdivia se concentró entre
+los meses de septiembre y octubre del año 1973, momento en que los cuatro
+regimientos actuaban coordinadamente. Hasta este lugar fueron trasladados
+muchos de los prisioneros, hombres y mujeres, desde recintos como la Cárcel Isla
+Teja, retenes y comisarías de Valdivia y otras ciudades, o bien, luego de ser detenidos
+durante operativos militares en zonas rurales, especialmente en la precordillera,
+eran traídos en camiones, hacinados y en muy malas condiciones físicas.<br>
+Un número importante de detenidos denuncia que fueron rapados al arribar
+al regimiento, donde luego eran incomunicados, encapuchados, privados de
+alimento y agua durante varios días, ya sea en el gimnasio, en los galpones o en
+las caballerizas.
+La Fiscalía Militar de Valdivia funcionó en el año 1973 en el Regimiento N°2
+Cazadores, lo que significó que muchos prisioneros fueran llevados por personal del
+Servicio de Inteligencia Militar (SIM), desde la cárcel u otros lugares de detención
+hacia este recinto para ser interrogados.<br>
+Ex Presos Políticos denunciaron haber sido torturados en sus inmediaciones,
+siendo objeto de golpizas (algunos con varillas de mimbre), aplicación de
+electricidad, simulacros de fusilamiento, el submarino en aguas servidas, extracción
+de uñas, obligación de permanecer en posiciones forzadas, colgamientos y
+quemaduras con cigarrillos.<h4>`, { maxWidth: 800 })
+ });;
+
+
+ var marker = L.marker([-39.828877, -73.227450], {icon: CCDD}).addTo(mapa)
+ ;marker.on('click', function() {
+    openPanel(`<h3>Campamento de Prisioneros Valdivia (Actual Gimansio Cendyr)<h3>
+<h4>
+Durante 1973 este recinto, que estaba a cargo del Ejército, se utilizó para la reclusión
+de presos políticos.<br>
+Los detenidos, hombres y mujeres, provenían en su mayoría de otros recintos. Durante su
+permanencia eran mantenidos en una sala del gimnasio de 36 por 26 metros, con camarotes
+o camas de campaña, dormían en las graderías del gimnasio. No se les permitía salir al
+aire libre y en cuanto ingresaban se les asignaba un número, a modo de identificación;
+por ese número serían llamados durante toda su permanencia en el lugar. <br> Los conducían
+a interrogatorios al regimiento de caballería, al SIM de Valdivia en la calle Errázuriz y al
+cuartel de Investigaciones de esta ciudad. Algunos denunciaron haber sido trasladados
+en camiones cerrados.<br>
+Los declarantes denunciaron también golpes, simulacros de fusilamiento y aplicación
+de electricidad.<h4>`,{ maxWidth: 600 }
+ )
+ });;
+
+ var marker = L.marker([-39.833135, -73.215365], {icon: CCDD}).addTo(mapa)
+ ;marker.on('click', function() {
+    openPanel(`<h3>Cuartel De Investigaciones<h3>
+<h4>
+Según consta de los antecedentes recabados por la Comisión, el mayor número de detenidos se registró entre los años 1973 y 1975.
+Los denunciantes relataron que los detenidos, hombres y mujeres, eran mantenidos en
+calabozos en el subterráneo del edificio y en una pequeña sala para aislamiento. PermaneCÍan vendados e incomunicados durante todo el tiempo.
+En los testimonios se consignó que sufrieron golpes, aplicación de electricidad, vejaciones
+y amenazas.<h4>`,{ maxWidth: 600 })
+ });;
+
+
+ var marker = L.marker([-39.821043, -73.211172], {icon: CCDD}).addTo(mapa)
+ ;marker.on('click', function() {
+    openPanel(`<h3>Tenencia los Jazmines<h3>
+<h4>
+ La Tenencia de Carabineros, Los Jazmines fue utilizada para la detencion de presos politcos de la region.<h4>`,{ maxWidth: 600 })
+ });;
+
+ var marker = L.marker([-39.806373, -73.208712], {icon: CCDD}).addTo(mapa)
+ ;marker.on('click', function() {
+    openPanel(`<h3>Retén de Carabineros Colico <h3>
+<h4> El retén de carabineros de Collico fue utilizao para la detencion de presos politcos de la region.<h4>`,{ maxWidth: 600 })
+ });;
+
+ var marker = L.marker([-39.869062, -73.399456], {icon: CCDD}).addTo(mapa)
+ ;marker.on('click', function() {
+    openPanel(`<h3>Retén de Carabineros de Niebla</h3>`)
+ });;
+
+  var marker = L.marker([-39.8204244, -73.229370], {icon: CCDD}).addTo(mapa)
+ ;marker.on('click', function() {
+    openPanel(`<h3>Ex Cuartel General de la IV Divisióndel Ejército<h3>
+<h4> En el año 1973 en este recinto funcionaba la IV División del Ejército, dependencia
+en la que, de acuerdo a diversos testimonios, se tomaron decisiones importantes
+respecto del destino de los presos políticos en los días y meses posteriores al Golpe
+de Estado, destacando entre ellos el del ex alcalde de Panguipulli don Alejandro
+Kohler, quien estuvo allí detenido junto a su padre.
+Entre los lugares de detención dentro de este lugar, se mencionan los calabozos
+ubicados en el zócalo, espacio que hoy es utilizado<h4>`,{ maxWidth: 600 })
+ });
+
+ var marker = L.marker([-39.869062, -73.399456], {icon: CCDD}).addTo(mapa)
+ ;marker.on('click', function() {
+    openPanel(`<h3>Retén de Carabineros de Niebla</h3>`)
+ });;
+
+  var marker = L.marker([-39.816659, -73.226084], {icon: CCDD}).addTo(mapa)
+ ;marker.on('click', function() {
+    openPanel(`<h3>Antiguo retén de carabineros de las Ánimas<h3>
+<h4>El antiguo retén de Carabineros estaba ubicado a un costado del puente Calle
+Calle y fue utilizado para la detención y tortura de presos políticos de la región de
+los Ríos, durante la dictadura cívico-militar.
+De acuerdo a los testimonios recabados, se señala que los detenidos, hombres
+y mujeres, eran mantenidos en calabozos en el subterráneo de la construcción y en
+una pequeña sala de aislamiento, vendados e incomunicados. En los testimonios se
+consignó que sufrieron golpizas, aplicación de electricidad, vejaciones y amenazas.
+Actualmente, es ocupado por la Agrupación de Monitores de Prevención de
+Alcohol y Drogas (AMPAD), que tiene una concesión de uso gratuito por 5 años,
+desde el año 2019<h4>`,{ maxWidth: 600 })
+ });
+
+
+ var marker = L.marker([-39.847372, -73.195982], {icon: CCDD}).addTo(mapa)
+ ;marker.on('click', function() {
+    openPanel(`<h3>Campo de Concentracion/Regimiento N°8 de Llancahue<h3>
+
+<h4>
+
+Este recinto fue utilizado como centro de reclusión y tortura de presos políticos.
+Los presos eran trasladados del regimiento hasta el campo de concentración Llancahue para ser 
+interrogados y sometidos a brutales torturas.<br>
+
+ <br> Los días 3 y 4 de octubre de 1973, en el Campo de Tiro de las Fuerzas Especiales del Regimiento N° 8 Llancahue fueron fusiladas
+12 personas pertenecientes al Complejo Maderero Panguipulli entre trabajadores y dirigentes,
+ todos acusados de asaltar el Retén de Carabineros de Neltume el día 12 de septiembre de 1973<br>
+
+ <br>
+Las victimas eran :<br>
+
+ <a href="https://interactivos.museodelamemoria.cl/victimas/?p=280" target="_blank">Pedro Purísimo Barria Ordóñez, 22 años</a>
+ <a href="https://interactivos.museodelamemoria.cl/victimas/?p=2340" target="_blank">José René Barrientos Warner, 29 años</a>
+ <a href="https://interactivos.museodelamemoria.cl/victimas/?p=2332" target="_blank">Sergio Jaime Bravo Aguilera, 21 años</a>
+ <a href="https://interactivos.museodelamemoria.cl/victimas/?p=551" target="_blank">Santiago Segundo Garcia Morales ,26 años</a>
+ <a href="https://interactivos.museodelamemoria.cl/victimas/?p=130" target="_blank">José Gregorio Liendo Vera, 28 años</a>
+ <a href="https://interactivos.museodelamemoria.cl/victimas/?p=2228" target="_blank">Luis Enrique del Carmen Guzman Soto, 21 años</a>
+ <a href="https://interactivos.museodelamemoria.cl/victimas/?p=646" target="_blank">Fernando Krauss Iturra, 24 años</a>
+ <a href="https://interactivos.museodelamemoria.cl/victimas/?p=1160" target="_blank">Luis Hernán Pezo Jara, 29 años</a>
+ <a href="https://interactivos.museodelamemoria.cl/victimas/?p=2584" target="_blank">Víctor Eugenio Rudolf Reyes, 32 años</a>
+ <a href="https://interactivos.museodelamemoria.cl/victimas/?p=1104" target="_blank">Rudemir Saavedra Bahamondes, 29 años</a>
+ <a href="https://interactivos.museodelamemoria.cl/victimas/?p=1944" target="_blank">Víctor Segundo Saavedra Muñoz, 19 años</a>
+ <a href="https://interactivos.museodelamemoria.cl/victimas/?p=2016" target="_blank">Luis Mario Valenzuela Ferrada, 20 años</a>
+
+
+`, {maxWidth: 600 } )
+ });;
+
+ // Panguipulli
+
+ var marker = L.marker([-39.641441, -72.336967], {icon: CCDD}).addTo(mapa)
+ ;marker.on('click', function() {
+    openPanel(`<h3>Quinta comisaria de carabineros de Panguipulli<h3>
+<h4>
+
+ La mayor cantidad de detenidos en este recinto se registró en el año 1973. Parte de
+los presos, según los testimonios, provenía de retenes de la precordillera (Neltume,
+Futrono, Liquiñe y Choshuenco) y fueron detenidos en operativos conjuntos con el
+Ejército en asentamientos campesinos y en la zona del Complejo Maderero Panguipulli.<br>
+<br> A la comisaría ingresaron en muy malas condiciones físicas, fueron desnudados,
+mojados y encerrados en calabozos muy húmedos. Los declarantes señalaron que
+permanecieron siempre incomunicados y muchos amarrados con alambre de púas.
+<br> Eran conducidos al subterráneo del recinto o a las caballerizas para ser sometidos a
+interrogatorios y torturas; aunque muchos denunciaron que ni siquiera se les interrogaba, sino que sólo eran torturados.<br>
+<br> Desde aquí, por lo general, eran trasladados a
+la ciudad de Valdivia, a la cárcel, al Servicio de Inteligencia Militar (SIM), al regimiento
+o a campos de prisioneros.<h4>`,{maxWidth: 800 } 
+ )
+ });;
+
+ var marker = L.marker([-39.641553, -72.331796], {icon: CCDD}).addTo(mapa)
+ ;marker.on('click', function() {
+    openPanel(`<h3>Gimnasio Municipal de Panguipulli<h3>
+<h4>
+ El Gimnasio Municipal, (Eduardo Brevis Aravena) de Panguipulli,
+   fue utilizado como centro de detencion y tortura de presos politicos de la region.<h4>`,{maxWidth: 600}    
+ )
+ });;
+
+ var marker = L.marker([-39.627591, -72.138181], {icon: CCDD}).addTo(mapa)
+ ;marker.on('click', function() {
+    openPanel(`<h3>Casa de Administración Fundo Releco<h3>
+<h4>
+ La Casa de Administración Fundo "Releco" en Panguipulli fue utilizada  
+como lugar de detencion de presos politicos.<h4>`, {maxWidth: 600})
+ });;
+
+ var marker = L.marker([-39.731076, -71.852518], {icon: CCDD}).addTo(mapa)
+ ;marker.on('click', function() {
+    openPanel(`<h3> Campamento militar de Liquiñe<h3>
+<h4>
+ El Campamento Militar Liquiñe y las Termas de Liquiñe fueron utilizados por el Ejercito y la CNI para la detencion,
+  tortura y asesinato de presos politcos de la region.<h4>`, {maxWidth:600})
+ });;
+
+ var marker = L.marker([-39.747389, -71.855621], {icon: CCDD}).addTo(mapa)
+ ;marker.on('click', function() {
+    openPanel(`<h3>Reten de carabineros de Liquiñe<h3>
+<h4>
+ Por el reten de Carabineros de Liquiñe pasaron varios de los fusilados en la llamada, "Matanza de Liquiñe", donde el 11 de Octubre fueron fusilados 
+15 campesinos del Complejo Maderero y Forestal Panguipulli.
+
+<h4> El grupo aprehensor estaba compuesto por efectivos militares que vestían uniforme de combate
+  y que pertenecían al Grupo N°3 de Helicópteros Maquehua de la ciudad de Temuco, de la Fuerza Aérea de Chile;
+   algunos funcionarios de Carabineros de la dotación del Retén de Liquiñe y Civiles del sector, incluyendo al empresario Luís Garcías Guzmán.<br>
+    Se movilizaban en vehículos de particulares, una camioneta del Servicio Agrícola y Ganadero (S.A.G.), un vehículo policial, 
+    una ambulancia del Retén de Liquiñe y contaron también con el apoyo de un helicóptero de la FACH.<br>
+     Los aprehensores actuaron divididos en varios grupos, que se juntaron en el cruce de Coñaripe, 
+     cercano a todos los lugares en que se practicaron las detenciones.Allí tomaron el camino a Villarrica, 
+     y alrededor de las 2:00 horas del día 11 de octubre de 1973, en el puente sobre el río Toltén procedieron 
+     a darles muerte y a arrojar sus cuerpos a las aguas.<br>
+
+
+  <br>  El  10 de octubre de 1973 fueron detenidos y posteriormente fusilados: :<br>
+<br>   <a href="https://interactivos.museodelamemoria.cl/victimas/?p=858" target="_blank">Luis Aldredo Rivera Catricheo, 52 años</a> 
+<br>   <a href="https://interactivos.museodelamemoria.cl/victimas/?p=280" target="_blank">Miguel José Tracanao Pincheira ,25 años</a>
+<br>   <a href="https://interactivos.museodelamemoria.cl/victimas/?p=1576" target="_blank">Eliseo Maximiliano Tracanao Pincheira, 16 años</a>
+<br>   <a href="https://interactivos.museodelamemoria.cl/victimas/?p=172" target="_blank">Salvador Alamos Rubilar, 45 años</a>
+<br>   <a href="https://interactivos.museodelamemoria.cl/victimas/?p=306" target="_blank">José Héctor Bórquez Levicán, 42 años</a>
+<br>   <a href="https://interactivos.museodelamemoria.cl/victimas/?p=1888" target="_blank">Alberto Segundo Reinante Raipán, 41 años</a>
+<br>   <a href="https://interactivos.museodelamemoria.cl/victimas/?p=2882" target="_blank">Modesto Juan Reinante Raipán, 18 años</a>
+<br>   <a href="https://interactivos.museodelamemoria.cl/victimas/?p=2882" target="_blank">Luis Armando Lagos Torres, 50 años</a>
+<br>   <a href="https://interactivos.museodelamemoria.cl/victimas/?p=653" target="_blank">Luis Armando Lagos Torres, 22 años</a>
+   <br><a href="https://interactivos.museodelamemoria.cl/victimas/?p=1610" target="_blank">Carlos Segundo Figueroa Zapata, 47 años</a>
+   <br><a href="https://interactivos.museodelamemoria.cl/victimas/?p=1013" target="_blank">Mauricio Segundo Curiñanco Reyes, 38 años</a>
+<br>   <a href="https://interactivos.museodelamemoria.cl/victimas/?p=1622" target="_blank">Isaías José Fuentealba Calderón, 29 años</a>
+   <br><a href="https://interactivos.museodelamemoria.cl/victimas/?p=691" target="_blank">Daniel Antonio Castro López, 68 años</a>
+  <br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=1756" target="_blank">Carlos Alberto Cayumán Cayumán, 31 años</a>
+  <br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=1622" target="_blank">Isaías José Fuentealba Calderón, 29 años</a>
+  <br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=1167" target="_blank">Bernarda Rosalba Vera Contardo, 27 años</a>
+`, {maxWidth:800})
+ });;
+
+ var marker = L.marker([-39.851113, -71.947269],{icon: CCDD}).addTo(mapa)
+ ;marker.on('click', function() {
+    openPanel(`<h3>Reten de carabineros de Neltume<h3>
+<h4>
+  Este retén fue utilizado en el año 1973. La mayoría de los testimonios recibidos sobre ese año fueron hombres
+del Complejo Maderero Panguipulli, detenidos en operativos conjuntos de carabineros
+y militares, también con la participación de algunos civiles. Según dichos testimonios,
+se les interrogaba en relación con el asalto del retén de Neltume. <br>
+<br> Ingresados al recinto, eran mantenidos en calabozos o en las pesebreras con cerdos y caballos, incomunicados,
+con los ojos vendados y amarrados mientras eran interrogados y torturados.
+Los ex prisioneros denunciaron haber sufrido golpes, amenazas, introducción de líquido
+a presión por la nariz, azotes con ramas de ortiga y pinchazos de agujas en los testículos.
+Varios testigos denunciaron haber sido obligados a permanecer en una casa de perro.<h4>`, {maxWidth:800})
+ });;
+
+ var marker = L.marker([-39.871893, -71.893167], {icon: CCDD}).addTo(mapa)
+ ;marker.on('click', function() {
+    openPanel(`<h3>Campamento militar Puerto Fuy / Pirehueico <h3>
+<h4>
+ El Campamento Militar Puerto Fuy / Pirihueico fue utilizado
+  por el Ejercito para la detencion de presos politcos en los meses subsiguientes al 11 de Septiembre 1973.<h4>`,{maxWidth:800})
+ });;
+
+ var marker = L.marker([-40.025581, -71.721359], {icon: CCDD}).addTo(mapa)
+ ;marker.on('click', function() {
+    openPanel(`<h3>Tenencia fronteriza de carabineros de Pirehueico<h3>
+<h4>
+En diciembre de 1973, en un enfrentamiento entre las mismas fuerzas policiales  dentro de la Tenencia de Carabineros de Pirehueico, 
+fue asesinado el cabo
+ <a href="https://interactivos.museodelamemoria.cl/victimas/?p=3277" target="_blank">Luis Barra Umaña</a>`
+,{maxWidth:800})
+ });;
+
+ var marker = L.marker([-39.837410, -72.084467], {icon: CCDD}).addTo(mapa)
+ ;marker.on('click', function() {
+    openPanel(`<h3>Reten de carabienros de Choshuenco<h3>
+<h4>
+ 
+De acuerdo con los antecedentes, este retén se utilizó en el año 1973. Sólo se denunciaron
+algunos casos en la década de 1980.
+Según los testimonios, al igual que en el caso del retén de Neltume, la mayoría de los
+hombres detenidos en 1973 provenían del Complejo Maderero Panguipulli y fueron
+apresados durante la ocupación militar de la zona, en operativos en los que participaban
+militares, civiles y carabineros de los retenes de este sector precordillerano de la provincia
+de Valdivia.
+Los testigos denunciaron que en el cuartel policial actuaba personal del Ejército, interrogando y torturando a los prisioneros.<br>
+
+<br> Los casos del año 1981 se relacionaron con detenciones de militantes del MIR que
+ingresaron clandestinamente a la zona del complejo. Los detenidos, luego de haber
+permanecido un tiempo en este recinto, fueron conducidos a Panguipulli y a Valdivia.
+Los testimonios señalan que sufrieron golpes, vejaciones sexuales, amenazas, fueron
+amarrados y mojados con agua fría, padecieron simulacro de fusilamiento y corte de
+pelo y bigotes con yataganes. 
+`, { maxWidth: 600 })
+ });;
+
+ var marker = L.marker([-39.819882, -72.442796], {icon: CCDD}).addTo(mapa)
+ ;marker.on('click', function() {
+    openPanel(`<h3>Reten de carabienros de Riñihue<h3>
+<h4>
+El retén de carabineros de Riñihue  fue utilizado 
+como lugar de detencion de presos politicos`, { maxWidth: 600 })
+ });;
+
+ // FUTRONO
+
+ var marker = L.marker([-40.127781, -72.393749], {icon: CCDD}).addTo(mapa)
+ ;marker.on('click', function() {
+    openPanel(`<h3>Comisarsia de Futrono<h3>
+<h4>
+ Según consta de los antecedentes, la gran mayoría de casos se registró en los años 1973
+y 1974.<br> 
+En el año 1973 las detenciones se produjeron en los asentamientos campesinos y en el
+Complejo Maderero Panguipulli, durante operativos militares realizados en conjunto
+con Carabineros y civiles, según señalaron los declarantes. Esta comisaría se constituyó
+en un recinto de tránsito, interrogatorios y torturas. De acuerdo a los testimonios,
+un gran número de campesinos fue traído en helicópteros desde la isla Huapi, en el
+Lago Ranco. Al interior de la comisaría eran interrogados y torturados por militares
+en el sector de las caballerizas; el resto del tiempo eran mantenidos en calabozos,
+hacinados y sucios, incomunicados, vendados, sin alimento, sin baño ni agua.<h4>`, {maxWidth: 600})
+ });;
+
+ var marker = L.marker([-40.131416, -72.389006], {icon: CCDD}).addTo(mapa)
+ ;marker.on('click', function() {
+    openPanel(`<h3>Colegio Maria Deogracia<h3>
+<h4>
+ Durante el operativo de gran envergadura en el sector denominado “Baños de Chihuío”, por parte de la IV División del Ejercito, 
+ en el cual participaron miembros de la Fuerza Aérea, boinas Verdes de la Escuela de Montaña (con asiento en Temuco), conscriptos del Regimiento “Cazadores” y “Maturana” y civiles de la localidad, 
+  detuvieron y dieron muerte a 18 personas, en su mayoría miembros del Sindicato Campesino “Esperanza del Obrero”, 
+  L caravana militar se hospedo en Futrono en la Escuela Particular Nº 45 Maria DeoGracia en Balmaceda 280,
+ Futrono (hoy Colegio Maria DeoGracia). <br> Esta escuela era perteneciente a las religiosas Franciscanas del Sagrado Corazón de Purulón, 
+ y por invitación directa de las mojas que dirigían dicho establecimiento educacional los militares utilizaron este recinto para la detencion
+ y tortura de presos politicos. <br>
+
+<br> El testimonio de uno de los conscripto del Regimiento “Cazadores” que participo en dicho operativo, 
+asegura que ellos albergaron en esta escuela a invitación de las religiosas, donde se hicieron asados y comilonas, 
+mientras los presos políticos de la localidad, que habían sido trasladado desde la Comisaría de Carabineros de Futrono, 
+eran interrogados en las aulas de la escuela.<h4>`, {maxWidth: 600 } ) });;
+
+ var marker = L.marker([-40.233055, -71.958596], {icon: CCDD}).addTo(mapa)
+ ;marker.on('click', function() {
+    openPanel(`<h3>Sede del Sindicato "Esperanza del Obrero", Chabranco<h3>
+<h4>
+ La Bodega del Edifico de Administración del Sindicato “Esperanza del Obrero” fueron utilizadas como centro de detención y tortura.
+  Ubicado en la cercanía de Chabranco, aquí fueron torturados miembros de este mismo Sindicato antes de ser asesinados en el fundo “Chihuio”.
+  `, {maxwith: 600})
+ });;
+
+ var marker = L.marker([-40.194129, -71.935565],{icon: CCDD}).addTo(mapa)
+ ;marker.on('click', function() {
+    openPanel(
+    `<h3>Casa de Administración Fundo Chihuio<h3>
+<h4>
+     La noche del 9 de Octubre de 1973  la casa de administración del fundo “Chihuio”, de propiedad de Américo González, 
+    se convirtió en el centro de exterminio donde se perpetró la matanza de Chihuio. <br>
+    Un convoy militar recorrió las localidades de Futrono, Llifén, Curriñe, Arquilhue y Chabranco, deteniendo a trabajadores del Complejo Maderero Panguipulli, 
+     muchos de ellos miembros del Sindicato Campesino Esperanza del Obrero. La misión, parte de la llamada "Operación Leopardo", 
+    estaba enfocada en eliminar una supuesta guerrilla rural que estaba en la zona.<br>
+    Los prisioneros, detenidos de sus hogares y lugares de trabajo, fueron llevados al sector de Baños de Chihuío. Allí, 
+    en una casa patronal, fueron torturados y luego ejecutados a corta distancia de la vivienda. 
+    Entre los asesinados se encontraba Fernando Mora Gutiérrez, un joven de tan solo 17 años, 
+    quien fue detenido junto a su padre tras intentar ayudar a desatascar uno de los camiones militares que transportaba prisioneros.<br>
+
+<br>Tras las ejecuciones, los cuerpos de las víctimas fueron cubiertos y abandonados en el lugar. Cerca de cinco años después,
+ en marco de la operación "Retiro de Televisores", los restos fueron desenterrados y hechos desaparecer por civiles bajo las órdenes del Ejército.
+  Esta operación buscaba eliminar las pruebas de los crímenes cometidos por la dictadura.
+   Hasta la fecha, muchos de los restos aún no han sido encontrados.<br>
+
+<br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=1292" target="_blank">Luis Arnaldo Ferrada Sandoval, 42 años</a>
+<br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=1378" target="_blank">Carlos Maximiliano Acuña Inostroza, 46 años</a>
+<br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=1164" target="_blank">José Orlando Barriga Soto, 32 años</a>
+<br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=836" target="_blank">José Rosamel Cortes Diaz, 35 años</a>
+<br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=472" target="_blank">Rubén Neftalí Duran Zuñiga, 22 años</a>
+<br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=2626" target="_blank">Eliacer Sigisfredo Freire Camaño, 20 años</a>
+<br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=547" target="_blank">Narciso Segundo Garcia Cancino, 31 años</a>
+<br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=1932" target="_blank">Juan Walter Gonzalez Delgado, 31 años</a>
+<br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=1162" target="_blank">Daniel Mendez Mendez, 42 años</a>
+<br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=735" target="_blank">Fernando Adrián Mora Gutierrez, 17 años</a>
+<br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=1364" target="_blank">Sebastián Mora Osses, 47 años</a>
+<br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=1050" target="_blank">Pedro Segundo Prederos Ferreira, 48 años</a>
+<br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=842" target="_blank">Rosendo Rebolledo Mendez, 40 años</a>
+<br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=1473" target="_blank">Ricardo Segundo Ruiz Rodriguez, 24 años</a>
+<br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=890" target="_blank">Carlos Vicente Salinas Flores, 21 años</a>
+<br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=910" target="_blank">Manuel Jesús Sepulveda Rebolledo, 28 años</a>
+<br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=947" target="_blank">Rubén Vargas Quezada, 56 años</a>`, {maxWidth: 800})
+ });;
+
+var marker = L.marker([-40.198930, -72.259331
+], {icon: CCDD}).addTo(mapa)
+ ;marker.on('click', function() {
+    openPanel(`<h3> Retén de carabineros de Llifén<h3>
+<h4>
+ El Retén de carabineros de Malahue fue citado en Informe de la Comisión Nacional Sobre Prisión Política y Tortura (Valech)
+ como centro de detencion de presos politcos de la region.<h4>`, {maxWidth: 600})
+ });;
+
+
+ //LAGO RANCO
+ var marker = L.marker([-40.31986, -72.47661], {icon: CCDD}).addTo(mapa)
+ ;marker.on('click', function() {
+    openPanel(`<h3> Tenencia de carabineros de Lago Ranco<h3>
+<h4>
+
+La Tenencia de Carabineros de Lago Ranco era un recinto de tránsito, 
+interrogación y tortura de prisioneros, la mayoría eran campesinos del mismo sector de Lago Ranco que, 
+luego de ser detenidos y conducidos al retén fueron trasladados a la Comisaría de Río Bueno. Allí se les mantuvo incomunicado,
+se les interrogó y torturó. Las condiciones de  vida en este cuartel eran similares a las de muchos otros: hacinamiento, frío,
+privación de alimento y agua. Allí permanecían amarrados y con los ojos vendados. Los presos políticos denunciaron haber sufrido golpes, 
+amenazas de fusilamiento, fueron obligados a beber agua con orina y excrementos y recibían amenazas permanente.
+
+ La gran mayoría de los prisioneros políticos en la Tenencia de Carabineros de Lago Ranco se concentró en 1973
+  y se convirtió en un recinto de detención e interrogatorio de presos-políticos de la región.<br>
+  El dia 16 de octubre de 1973 Un grupo de trabajadores fueron detenidos desde sus domicilios y conducidos a la Tenencia de Carabineros de Lago Ranco. 
+En la noche de ese día fueron subidos al Vapor "Laja", donde fueron ejecutados. Sus cuerpos fueron lanzados al lago, 
+sin que hayan sido encontrados hasta la fecha.<br>
+
+
+ <br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=563" target="_blank">Arturo Vega González, 20 años</a>
+<br>  <a href="https://interactivos.museodelamemoria.cl/victimas/?p=866" target="_blank">Teófilo González Calfulef, 24 años</a>
+  <br><a href="https://interactivos.museodelamemoria.cl/victimas/?p=1165" target="_blank">Manuel Jesús Hernández Inostroza, 42 años</a>
+  <br><a href="https://interactivos.museodelamemoria.cl/victimas/?p=1163" target="_blank">Cardenio Ancacura Manquian, 20 años</a> <br>
+    `, {maxWidth: 600})
+ 
+ });;
+
+ //RIO BUENO y LA UNION
+
+ var marker = L.marker([-40.335495, -72.957977], {icon: CCDD}).addTo(mapa)
+ ;marker.on('click', function() {
+    openPanel(`<h3> Comisaría de Rio Bueno<h3>
+<h4>
+
+Los hombres y mujeres que estuvieron detenidos en este lugar denunciaron haber sido tratados con violencia desde el mismo momento de su detención.
+Varios declarantes fueron golpeados frente a sus hijos pequeños y a sus mujeres. Luego, 
+durante el trayecto hasta la comisaría, fueron maltratados.<br>
+
+Al llegar, eran amarrados, algunos con alambre de púas, se les vendaban los ojos y los encerraban en calabozos a los que se lanzaba agua constantemente. 
+En esas condiciones permanecían durante varios días, sin alimento, incomunicados e interrogados y torturados. 
+Desde aquí eran trasladados a Valdivia, la mayoría a la Cárcel de esa ciudad, en camiones militares,
+amarrados unos con otros y en muy malas condiciones físicas.<br>
+
+<br> En la década de 1980, según los detenidos que estuvieron allí, la CNI participó en la Comisaría,
+trasladándolos a un recinto ubicado en la ciudad de Valdivia. Los testimonios de detenidos en este recinto en 1973,
+refieren la aplicación de electricidad, golpes, posturas forzadas, amenazas de detención y tortura a sus familiares, 
+simulacro de fusilamiento, el submarino, introducción de agua a presión por la boca y la nariz, golpes con martillos en las uñas,
+fueron obligados a escuchar torturas infligidas a otros detenidos y soportaron vejación y violación sexual.<h4>`, {maxWidth: 600})
+ });;
+
+ var marker = L.marker([-40.334607, -72.962581], {icon: CCDD}).addTo(mapa)
+ ;marker.on('click', function() {
+    openPanel(`<h3> Cárcel de Rio Bueno<h3>
+<h4>
+  La Carcel de Rio Bueno funcionó como centro de detencion de presos politcos en los meses subsiguientes al 11 de Septiembre 1973.<h4>` , {maxWidth: 600})
+ });;
+
+  var marker = L.marker([-40.419208, -72.786062], {icon: CCDD}).addTo(mapa)
+ ;marker.on('click', function() {
+    openPanel(`<h3>Retén de carabineros de Crucero<h3>
+<h4>
+  El Retèn de carabineros de Crucero funcionó como centro de detencion de presos politcos en los meses subsiguientes al 11 de Septiembre 1973.<h4>` , {maxWidth: 600})
+ });;
+
+   var marker = L.marker([-40.374787, -72.621115], {icon: CCDD}).addTo(mapa)
+ ;marker.on('click', function() {
+    openPanel(`<h3>Retén de carabineros de Vivanco<h3>
+<h4>
+  El Retèn de carabineros de Vivanco funcionó como centro de detencion de presos politcos en los meses subsiguientes al 11 de Septiembre 1973.<h4>` , {maxWidth: 600})
+ });;
+
+
+ var marker = L.marker([-40.293143, -73.085891], {icon: CCDD}).addTo(mapa)
+ ;marker.on('click', function() {
+    openPanel(`<h3> Cárcel de La Unión'<h3>
+<h4>
+ La Cárcel de La Unión fue utilizada para la detencion de presos politcos en los meses subsiguientes al 11 de Septiembre 1973.<h4>`, {maxWidth: 600}
+ )
+ });;
+
+ var marker = L.marker([-40.291996, -73.081155], {icon: CCDD}).addTo(mapa)
+ ;marker.on('click', function() {
+    openPanel(`<h3>Cuartel de investigaciones de La Unión'<h3>
+<h4>
+ El cuartel de investigaciones de la Unión fue utilizado para la detencion de presos politcos en los meses subsiguientes al 11 de Septiembre 1973.<h4>`
+ , {maxWidth: 600})
+ });;
+
+ 
+
+ // Resto
+ var marker = L.marker([-39.862216, -72.812525], {icon: CCDD}).addTo(mapa)
+ ;marker.on('click', function() {
+    openPanel(`<h3>Comisaria de Los Lagos <h3>
+<h4>
+ Según consta de los antecedentes recabados por la Comisión, fue en el año 1973 cuando
+se registraron la casi totalidad de las detenciones en ese lugar.
+En el trayecto hacia la comisaría, luego de ser detenidos, algunos debieron caminar
+más de 20 kilómetros sometidos a torturas y simulacros de fusilamiento durante el
+trayecto. También les hicieron caminar desde la comisaría hasta la ciudad de Valdivia,
+por caminos interiores.
+Los detenidos, hombres y mujeres, eran interrogados en bodegas del recinto o en las
+caballerizas y luego recluidos en calabozos sin luz ni baño. Allí permanecían amarrados,
+vendados e incomunicados. La mayoría fue llevada desde aquí a otros recintos de reclusión
+en la ciudad de Valdivia.<h4>`
+ , {maxWidth: 600})
+ });;
+
+ var marker = L.marker([-39.452502, -72.772324], {icon: CCDD}).addTo(mapa)
+ ;marker.on('click', function() {
+    openPanel(`<h3>Tenencia de carabineros de Lanco<h3>
+<h4>
+ Los presos políticos establecieron en sus testimonios que la Tenencia de Carabineros de Lanco fue un recinto de tránsito, 
+ donde los prisioneros eran torturados y luego conducidos a la ciudad de Valdivia.
+
+10 de octubre de 1973 Trabajadores son  detenidos por Carabineros de Malalhue y de Lanco,
+ y conducidos al Retén de Malalhue, siendo trasladados posteriormente a la Tenencia de Lanco, 
+ donde permanecieron hasta el día 12 de octubre de 1973.
+Testigos de ese grupo presenciaron la muerte de un prisionero por los golpes sufridos y otros relataron que 4 detenidos que eran llevados a Valdivia fueron asesinados en el trayecto,
+con el  pretexto de la ley de fuga incluyendo a: <br>
+<br><a href="https://interactivos.museodelamemoria.cl/victimas/?p=2075" target="_blank">José Manuel Arriagada Cortes, 19 años</a>
+<br><a href="https://interactivos.museodelamemoria.cl/victimas/?p=2082" target="_blank">José Gabriel Arriagada Zuñiga, 30 años</a>
+<br><a href="https://interactivos.museodelamemoria.cl/victimas/?p=2187" target="_blank">José Manuel Carrasco Torres, 19 años</a>
+<br><a href="https://interactivos.museodelamemoria.cl/victimas/?p=563" target="_blank">Gilberto Antonio Ortega Alegria, 39 años</a>
+
+
+
+`, {maxWidth: 600} )
+ });;
+
+  var marker = L.marker([-39.544432, -72.503030], {icon: CCDD}).addTo(mapa)
+ ;marker.on('click', function() {
+    openPanel(`<h3> Retén de carabineros de Malalhue <h3>
+<h4>
+ El Retén de carabineros de Malahue fue citado en Informe de la Comisión Nacional Sobre Prisión Política y Tortura (Valech)
+ como centro de detencion de presos politcos de la region.<h4>`, {maxWidth: 600})
+ });;
+
+ var marker = L.marker([-39.540736, -72.960657], {icon: CCDD}).addTo(mapa)
+ ;marker.on('click', function() {
+    openPanel(`<h3> Comisaria de San José de la Mariquina<h3>
+<h4>
+ La Comisaría de Carabineros, San José de La Mariquina fue citada en Informe de la Comisión Nacional Sobre Prisión Política y Tortura (Valech)
+ como centro de detencion de presos politcos de la region.<h4>`, {maxWidth: 600})
+ });;
+
+ var marker = L.marker([-39.889087, -73.426458], {icon: CCDD}).addTo(mapa)
+ ;marker.on('click', function() {
+    openPanel(`<h3> Retén de Corral <h3>
+<h4>
+ El Retén de Corral fue citado en Informe de la Comisión Nacional Sobre Prisión Política y Tortura (Valech)
+ como centro de detencion de presos politcos de la region.<h4>`)
+ });;
+
+ var marker = L.marker([-40.069418, -72.873192],{icon: CCDD}).addTo(mapa)
+ ;marker.on('click', function() {
+    openPanel(`<h3>Tenencia de carabineros de Paillaco<h3>
+<h4>
+ La tenencia de carabineros de Pailaco fue utilizada para la detencion de presos politcos en los
+  meses subsiguientes al 11 de Septiembre 1973.<h4>`
+ , {maxWidth: 600})
+ });;
+
+
+ /////// MEMORIALES //////
+
+   var marker = L.marker([-39.843286, -73.292629],{icon: memorial}).addTo(mapa) ;marker.on('click', function() 
+  {openPanel(`<h3>Memorial puente estancilla</h3>
+<h4>
+Este memorial nació como una cruz de madera en honor a:
+<a href="https://interactivos.museodelamemoria.cl/victimas/?p=924" target="_blank">Rogelio Tapia de la Puente, 30 años</a>
+<a href="https://interactivos.museodelamemoria.cl/victimas/?p=278" target="_blank">Raúl Barrientos Matamala, 23 años</a>
+</h4>
+
+
+  <h4>asesinados por la CNI en agosto de 1984 en el puente Estancilla. La cruz fue varias veces destruida y repuesta, 
+asta que finalmente el memorial fue reforzado con concreto y metal por gestión de los familiares e instalando una placa 
+que recuerda además a :
+<a href="https://interactivos.museodelamemoria.cl/victimas/?p=1168" target="_blank">Juan Boncompte Andreu, 30 años</a>
+  <a href="https://interactivos.museodelamemoria.cl/victimas/?p=334" target="_blank">Mario Mujica Barros, 32 años</a>
+  <a href="https://interactivos.museodelamemoria.cl/victimas/?p=1925" target="_blank">Luciano Aedo Arias, 34 años</a>
+      <a href="https://interactivos.museodelamemoria.cl/victimas/?p=2224" target="_blank">Nelson Herrera Riveros, 30 años</a>
+      </h4>
+      
+      <h4> Juan Boncompte Andreu, acribillado en Valdivia, en la población Rubén Darío; 
+Mario Mujica Barros, en Los Ángeles;
+ Luciano Aedo Arias,
+  Mario Lagos Rodríguez
+   y Nelson Herrera Riveros, en Concepción,
+    todos asesinados por la CNI en la operación «alfa carbón».<br>
+  Los jóvenes pertenecían a una unidad del MIR de la zona sur. Dos años más tarde,
+ en agosto de 1986 se crearía la Agrupación de Familiares de Ejecutados Políticos (AFEP) de Valdivia.</h4> `);
+
+});
+
+
+   var marker = L.marker([-39.746590, -71.852240],{icon: memorial}).addTo(mapa) ;marker.on('click', function() 
+  {openPanel(`<h3>Memorial de Liquiñe</h3>
+<h4>
+Recuerda a 15 personas detenidas en Liquiñe, Trafun y Paimun, ejecutados en el puente Toltén, el 10 de octubre de 1973. 
+Casi todos los ejecutados y desaparecidos pertenecían al Complejo Forestal y Maderero Panguipulli.
+
+Aquí el detalle de los nombres de cada uno de ellos,
+ quienes representan plenamente a la AFDD-AFEP por el hecho de haber sido ejecutados
+ y luego desaparecidos sus cuerpos en el puente sobre el río Toltén, testigo de su asesinato:
+
+ <br>   <a href="https://interactivos.museodelamemoria.cl/victimas/?p=858" target="_blank">Luis Aldredo Rivera Catricheo, 52 años</a> 
+<br>   <a href="https://interactivos.museodelamemoria.cl/victimas/?p=280" target="_blank">Miguel José Tracanao Pincheira ,25 años</a>
+<br>   <a href="https://interactivos.museodelamemoria.cl/victimas/?p=1576" target="_blank">Eliseo Maximiliano Tracanao Pincheira, 16 años</a>
+<br>   <a href="https://interactivos.museodelamemoria.cl/victimas/?p=172" target="_blank">Salvador Alamos Rubilar, 45 años</a>
+<br>   <a href="https://interactivos.museodelamemoria.cl/victimas/?p=306" target="_blank">José Héctor Bórquez Levicán, 42 años</a>
+<br>   <a href="https://interactivos.museodelamemoria.cl/victimas/?p=1888" target="_blank">Alberto Segundo Reinante Raipán, 41 años</a>
+<br>   <a href="https://interactivos.museodelamemoria.cl/victimas/?p=2882" target="_blank">Modesto Juan Reinante Raipán, 18 años</a>
+<br>   <a href="https://interactivos.museodelamemoria.cl/victimas/?p=2882" target="_blank">Luis Armando Lagos Torres, 50 años</a>
+<br>   <a href="https://interactivos.museodelamemoria.cl/victimas/?p=653" target="_blank">Luis Armando Lagos Torres, 22 años</a>
+   <br><a href="https://interactivos.museodelamemoria.cl/victimas/?p=1610" target="_blank">Carlos Segundo Figueroa Zapata, 47 años</a>
+   <br><a href="https://interactivos.museodelamemoria.cl/victimas/?p=1013" target="_blank">Mauricio Segundo Curiñanco Reyes, 38 años</a>
+<br>   <a href="https://interactivos.museodelamemoria.cl/victimas/?p=1622" target="_blank">Isaías José Fuentealba Calderón, 29 años</a>
+   <br><a href="https://interactivos.museodelamemoria.cl/victimas/?p=691" target="_blank">Daniel Antonio Castro López, 68 años</a>
+  <br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=1756" target="_blank">Carlos Alberto Cayumán Cayumán, 31 años</a>
+  <br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=1622" target="_blank">Isaías José Fuentealba Calderón, 29 años</a>
+  <br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=1167" target="_blank">Bernarda Rosalba Vera Contardo, 27 años</a>
+ `)
+});
+
+
+   var marker = L.marker([-39.850383, -71.945767],{icon: memorial}).addTo(mapa) ;marker.on('click', function() 
+  {openPanel(`<h3>Memorial de Neltume</h3>
+<h4>
+Recuerda a los 71 obreros, funcionarios y campesinos del Complejo Forestal y Maderero Panguipulli COFOMAP que fueron torturados, 
+asesinados y hechos desaparecer por el terrorismo de Estado en diversas localidades y circunstancias. 
+También representa a los miristas caídos en la fallida operación retorno (1981).`)
+});
+
+   var marker = L.marker([-39.829300, -73.215533],{icon: memorial}).addTo(mapa) ;marker.on('click', function() 
+  {openPanel(`<h3>Memorial por la vida</h3>
+<h4>
+Recuerda a las 116 víctimas de crímenes de lesa humanidad perpetrados por la última dictadura civil-militar de la entonces provincia de Valdivia. 
+La escultura fue diseñada por Alejandro Verdi. 
+Cada 11 de septiembre se realiza una romería al memorial donde se hace un acto conmemorativo.`)
+});
+
+
+ var marker = L.marker([-40.231556, -71.970582],{icon: memorial}).addTo(mapa) ;marker.on('click', function() 
+  {openPanel(`<h3>Memorial de Chihuio</h3>
+<h4>
+“El caso” Chihuío es un crimen de lesa humanidad donde 18 personas fueron detenidas, torturadas y asesinadas por efectivos militares en las termas de Chihuío el 09 de octubre de 1973. 
+Sus cuerpos fueron inhumados clandestinamente y luego exhumados y arrojados al mar. La mayoría de las víctimas estaba asociada al Complejo Forestal y Maderero Panguipulli (COFOMAP). 
+Los crímenes han sido confirmados por sendas investigaciones judiciales, algunas aún en curso , 
+en cuyos fallos se detalla el asesinato de numerosos obreros forestales y dirigentes sindicales, 
+además de militantes del Movimiento de Izquierda Revolucionario (MIR).
+
+El memorial recuerda a 18 campesinos y obreros madereros de las localidades de Futrono, Llifén, Curriñe y Chabranco pertenecientes, en su mayoría,
+ al sindicato Esperanza del Obrero del Complejo Forestal y Maderero de Panguipulli, comuna de Futrono. Las víctimas fueron:
+ 
+ <br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=1292" target="_blank">Luis Arnaldo Ferrada Sandoval, 42 años</a>
+<br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=1378" target="_blank">Carlos Maximiliano Acuña Inostroza, 46 años</a>
+<br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=1164" target="_blank">José Orlando Barriga Soto, 32 años</a>
+<br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=836" target="_blank">José Rosamel Cortes Diaz, 35 años</a>
+<br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=472" target="_blank">Rubén Neftalí Duran Zuñiga, 22 años</a>
+<br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=2626" target="_blank">Eliacer Sigisfredo Freire Camaño, 20 años</a>
+<br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=547" target="_blank">Narciso Segundo Garcia Cancino, 31 años</a>
+<br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=1932" target="_blank">Juan Walter Gonzalez Delgado, 31 años</a>
+<br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=1162" target="_blank">Daniel Mendez Mendez, 42 años</a>
+<br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=735" target="_blank">Fernando Adrián Mora Gutierrez, 17 años</a>
+<br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=1364" target="_blank">Sebastián Mora Osses, 47 años</a>
+<br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=1050" target="_blank">Pedro Segundo Prederos Ferreira, 48 años</a>
+<br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=842" target="_blank">Rosendo Rebolledo Mendez, 40 años</a>
+<br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=1473" target="_blank">Ricardo Segundo Ruiz Rodriguez, 24 años</a>
+<br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=890" target="_blank">Carlos Vicente Salinas Flores, 21 años</a>
+<br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=910" target="_blank">Manuel Jesús Sepulveda Rebolledo, 28 años</a>
+<br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=947" target="_blank">Rubén Vargas Quezada, 56 años</a>`)
+});
+
+
+   var marker = L.marker([-39.686294, -73.101902],{icon: memorial}).addTo(mapa) ;marker.on('click', function() 
+  {openPanel(`<h3>Memorial Puente Pichoy</h3>
+<h4>
+Recuerda a:
+
+<br><a href="https://interactivos.museodelamemoria.cl/victimas/?p=2075" target="_blank">José Manuel Arriagada Cortes, 19 años</a>
+<br><a href="https://interactivos.museodelamemoria.cl/victimas/?p=2082" target="_blank">José Gabriel Arriagada Zuñiga, 30 años</a>
+<br><a href="https://interactivos.museodelamemoria.cl/victimas/?p=2187" target="_blank">José Manuel Carrasco Torres, 19 años</a>
+<br><a href="https://interactivos.museodelamemoria.cl/victimas/?p=563" target="_blank">Gilberto Antonio Ortega Alegria, 39 años</a>`)
+});
+
+
+   var marker = L.marker([-39.840809, -73.215964],{icon: memorial}).addTo(mapa) ;marker.on('click', function() 
+  {openPanel(`<h3>Memorial de la Mano</h3>
+<h4>
+En recuerdo de J<a href="https://interactivos.museodelamemoria.cl/victimas/?p=1168" target="_blank">Juan Boncompte Andreu, 30 años</a>, asesinado el 24 de agosto de 1984 en dicha población (operación alfa carbón). 
+Su mujer, Inés embarazada de 7 meses, 
+estaba con él en el momento del allanamiento de su casa y ejecución de parte de alrededor de 15 funcionarios de la CNI.`)
+});
+
+
+   var marker = L.marker([-39.848117, -73.197300],{icon: memorial}).addTo(mapa) ;marker.on('click', function() 
+  {openPanel(`<h3>Memorial de LLancahue</h3>
+<h4>
+Recuerda a 12 jóvenes miristas fusilados el 3 y 4 de octubre de 1973 sin juicio justo alguno, acusados falsamente de un supuesto asalto al retén de Neltume. La ejecución fue realizada en el marco de la Caravana de la Muerte en el interior del regimiento de caballería nº2 Cazadores de Valdivia, donde hoy se ubica la cárcel de la ciudad. La mayoría de las víctimas trabajaban en el Complejo Forestal y Maderero Panguipulli (COFOMAP) o eran jóvenes miristas. La reconstitución de escena en el marco de la investigación realizada por el ministro en visita Juan Guzmán reveló casi 30 años más tarde que el asalto realmente nunca existió.
+
+
+ <a href="https://interactivos.museodelamemoria.cl/victimas/?p=280" target="_blank">Pedro Purísimo Barria Ordóñez, 22 años</a>
+ <a href="https://interactivos.museodelamemoria.cl/victimas/?p=2340" target="_blank">José René Barrientos Warner, 29 años</a>
+ <a href="https://interactivos.museodelamemoria.cl/victimas/?p=2332" target="_blank">Sergio Jaime Bravo Aguilera, 21 años</a>
+ <a href="https://interactivos.museodelamemoria.cl/victimas/?p=551" target="_blank">Santiago Segundo Garcia Morales ,26 años</a>
+ <a href="https://interactivos.museodelamemoria.cl/victimas/?p=130" target="_blank">José Gregorio Liendo Vera, 28 años</a>
+ <a href="https://interactivos.museodelamemoria.cl/victimas/?p=2228" target="_blank">Luis Enrique del Carmen Guzman Soto, 21 años</a>
+ <a href="https://interactivos.museodelamemoria.cl/victimas/?p=646" target="_blank">Fernando Krauss Iturra, 24 años</a>
+ <a href="https://interactivos.museodelamemoria.cl/victimas/?p=1160" target="_blank">Luis Hernán Pezo Jara, 29 años</a>
+ <a href="https://interactivos.museodelamemoria.cl/victimas/?p=2584" target="_blank">Víctor Eugenio Rudolf Reyes, 32 años</a>
+ <a href="https://interactivos.museodelamemoria.cl/victimas/?p=1104" target="_blank">Rudemir Saavedra Bahamondes, 29 años</a>
+ <a href="https://interactivos.museodelamemoria.cl/victimas/?p=1944" target="_blank">Víctor Segundo Saavedra Muñoz, 19 años</a>
+ <a href="https://interactivos.museodelamemoria.cl/victimas/?p=2016" target="_blank">Luis Mario Valenzuela Ferrada, 20 años</a>`)
+});
+
+   var marker = L.marker([-39.461455, -73.232988],{icon: memorial}).addTo(mapa) ;marker.on('click', function() 
+  {openPanel(`<h3>Memorial de la Mano</h3>
+<h4>
+Recuerda a <a href="https://interactivos.museodelamemoria.cl/victimas/?p=461" target="_blank">José Matías Ñanco Lillo, 60 años</a>
+, ejecutado a sangra fría frente a más de 10 testigos y luego su cuerpo hecho desaparecer por militares el 31 de octubre de 1973.
+
+«[…] Se trata de un asesinato de un prisionero, de una persona detenida por la fuerza militar armada que capturó en sus domicilios,
+ torturó y trasladó hasta Valdivia a más de veinte campesinos mapuches de la comunidad de Maquillahue, 
+ en una jornada que por su brutalidad es recordada con lujo de detalles por todos los comuneros hasta la fecha,
+ marcando para siempre a sus habitantes.[…] `)
+});
+
+ var marker = L.marker([-39.830120, -73.209806],{icon: memorial}).addTo(mapa) ;marker.on('click', function() 
+  {openPanel(`<h3>Plazuela Carlos Lorca</h3>
+<h4>
+<a href="https://interactivos.museodelamemoria.cl/victimas/?p=3117" target="_blank">Carlos Lorca Tobar</a>, 
+fue un Diputado de la República de Chile, entre mayo de
+1973 hasta la disolución del congreso en septiembre del mismo año. Estudiante
+de medicina de la Universidad de Chile, fue Secretario General de la Federación
+de Estudiantes de dicha casa de estudios. En 1971 se convirtió en el Secretario
+General de las Juventudes Socialistas de Chile, siendo, posteriormente,
+designado (a solicitud de la Juventudes Socialistas de Valdivia) como candidato
+a Diputado por el distrito de Valdivia. En 1975, Carlos Lorca se refugia en la
+clandestinidad y es tomado prisionero en Santiago donde es derivado a Villa
+Grimaldi, siendo éste su último paradero conocido, ya que aún permanece en
+calidad de detenido desaparecido. `)
+});
+
+ var marker = L.marker([-39.806129, -73.248338],{icon: memorial}).addTo(mapa) ;marker.on('click', function() 
+  {openPanel(`<h3>Memorial UACH</h3>
+<h4>
+La Piedra Recordatoria a Estudiantes Víctimas de Violación a los Derechos
+Humanos, recuerda a los jóvenes alumnos de la Universidad Austral de Chile que
+en diferentes circunstancias fueron asesinados por agentes del Estado.
+Los estudiantes conmemorados son: 
+José Luis Appel, 
+José René Barrientos,
+Carmen Angélica Delard, 
+Víctor Fernández Krauss,
+José Gregorio Liendo, Mario
+Alejandro Mellado,
+ Sergio Pardo, Héctor Darío Valenzuela 
+ y Hugo Ribol Vásquez.`)
+});
+
+
+ var marker = L.marker([-39.849057, -71.945961],{icon: memorial}).addTo(mapa) ;marker.on('click', function() 
+  {openPanel(`<h3>Museo de la memoria Neltume</h3>
+<h4>
+Neltume fue escenario de graves actos de represión durante distintos períodos
+de la dictadura. En un primer momento, durante los días 3 y 4 de octubre de 1973,
+son ejecutados 12 hombres acusados de asaltar el 12 de de 1973, el Retén de
+Carabineros de Neltume. Luego, en el mes de julio de 1981, es descubierto un
+campamento del MIR, cuyos militantes ingresaron en forma clandestina a la zona
+del Complejo Maderero Panguipulli en el contexto de la llamada Operación Retorno,
+son ejecutados 9 en la montaña, 2 son detenidos desaparecidos y el sobreviviente
+Mario Lagos es ejecutado por la CNI en 1984 durante la operación Alfa Carbón.
+El Centro Cultural Museo y Memoria de Neltume, nace el 24 de noviembre de
+2004, mediante una asamblea compuesta por diversos socios y socias (vecinos
+y vecinas históricos de la zona, familias, amigos y amigas de expresos políticos,
+ejecutados y sobrevivientes de la dictadura cívico-militar). Su intención fue crear
+este espacio en base a trabajo comunitario y poner en valor la historia del territorio.
+Este museo funciona actualmente en una de las 3 casas de la administración de
+COFOMAP y, en su interior, comprende distintas salas entre las que están: Sala
+Primeros Habitantes; Sala Vida y Trabajo en la Montaña; Sala del Aserradero; Sala
+de la Memoria, Violencia Política y DD.HH y Sala de Archivo. `)
+});
+
+ var marker = L.marker([-39.836791, -72.0838169],{icon: memorial}).addTo(mapa) ;marker.on('click', function() 
+  {openPanel(`<h3>Memorial de Miguel Cabrera “Paine”</h3>
+<h4>Memorial levantado en recuerdo del militante del MIR Miguel Cabrera
+Fernández, “Paine”, Jefe del Destacamento Guerrillero Toqui Lautaro, muerto
+en combate el 15 de octubre de 1981 en el contexto de la “Operación Retorno”,
+realizada por militantes del MIR que ingresaron clandestinamente al país con el
+objetivo de establecer una base cordillerana en el sur del país, levantando un
+campamento de guerrilleros, específicamente en la zona de Neltume. <h4>
+ `)
+});
+
+
+</script>
+</body>
+</html>
+
+git remote add origin https://github.com/Vregorio666/Mmp.git
+git branch -M main
+git push -u origin main
