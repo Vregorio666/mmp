@@ -294,6 +294,8 @@ h4 {
 <script>
 // Inicio mapa
 var mapa = L.map('mapa').setView([-39.95, -72.8], 9);
+	});
+osm.addTo(mapa);	
 // Capa OSM
 var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
@@ -1478,6 +1480,7 @@ Balmaceda, allí se encuentra el Retén de Carabineros.
 </script>
 </body>
 </html>
+
 
 
 
