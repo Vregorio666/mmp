@@ -37,7 +37,7 @@ h3 {
 
 h4 {
        font-size: 13px;
-  font-family: 'Courier New', Courier;
+  font-family: Arial, sans-serif;
   font-weight: bold;  
   line-height: 1.5;
   text-align: justify;
@@ -255,7 +255,7 @@ h4 {
     <div id="info-titulo"><h3>Mapa de la Memoria</h3></div>
      <div id="info-logo"><img src="./Casa_memoria.png" alt="Casa de la Memoria" style="width:100%; border-radius:8px; margin-top:10px;"></div>
     <div id="info-frase"> <h2>"Es vital entender que ellos no son solo una fotografía en una pancarta: eran seres humanos,
-      personas sensibles, de carne y hueso, como usted, como yo, que tenían hermosos sueños y por eso fueron considerados peligrosos<br>
+      personas sensibles, de carne y hueso, como usted, como yo, que tenían hermosos sueños y por eso fueron considerados peligrosos.<br>
       <br>¿Era neccesario para los que detentan el poder hacerlos desaparecer como si nunca hubieran existido?"<br>
     <p style="text-align: right;">- Ana Gonzalez de Recabarren</p> </h2></div>
     <div id="info-leyenda">
@@ -293,11 +293,13 @@ h4 {
   
 <script>
 // Inicio mapa
-var mapa = L.map('mapa').setView([-40, -72.8], 9);
+var mapa = L.map('mapa').setView([-39.95, -72.8], 9);
 // Capa OSM
-var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+var osm =   L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_toner_lite/{z}/{x}/{y}{r}.{ext}', {
+	minZoom: 9,
+	maxZoom: 20,
+	attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+	ext: 'png'
 });
 osm.addTo(mapa);
 
@@ -486,7 +488,9 @@ Ex Presos Políticos denunciaron haber sido torturados en sus inmediaciones,
 siendo objeto de golpizas (algunos con varillas de mimbre), aplicación de
 electricidad, simulacros de fusilamiento, el submarino en aguas servidas, extracción
 de uñas, obligación de permanecer en posiciones forzadas, colgamientos y
-quemaduras con cigarrillos.<h4>`, { maxWidth: 800 })
+quemaduras con cigarrillos.
+
+<br> <h4>`, { maxWidth: 800 })
  });;
 
 
@@ -1244,14 +1248,235 @@ campamento de guerrilleros, específicamente en la zona de Neltume. <h4>
  `)
 });
 
+ var marker = L.marker([-40.026590, -71.724451],{icon: memorial}).addTo(mapa) ;marker.on('click', function() 
+  {openPanel(`<h3>Ex-Hotel Pirihueico</h3>
+<h4>De acuerdo al testimonio entregado por don José Israel Valenzuela, el Hotel
+Pirehueico fue un lugar donde en los días posteriores al Golpe de Estado los
+militares llevaban a obreros y trabajadores del Complejo Forestal y Maderero
+Panguipulli, los que eran torturados en los subterráneos del inmueble:
+Puerto Fuy
+<p style="font-style: italic;">“Cuando fue el Golpe Militar mucha gente se fue para Argentina, no había nada
+de trabajo…Acá el Complejo paró todo, se acabó el trabajo… Acá se torturó mucha
+gente, allá abajo en el Hotel, a toda a gente obrera nos venían a buscar en camión en la
+noche, a las 3 de la mañana, nos llevaban al Hotel y allá nos torturaban. Los militares
+se tomaron el Hotel.
+Yo no era militante ni dirigente ni nada, y toda la gente igual eran puros
+trabajadores. Llegaban los milicos y nos preguntaban dónde estaban los campos
+militares de entrenamiento, y ¿de adonde poh?, no había nada acá.
+En el subterráneo nos metían, nos tuvieron ahí incomunicados, golpeaban la puerta
+‘ya te vamos a venir a matar, te falta poquito’, nos metían a un congelador grande que
+había, antes de 5 minutos ya corrían lágrimas de dolor, nos ponían corriente en los
+testículos, en los riñones, en el cerebro, era muy duro… eso no se olvida, nunca”.</p><br>
+
+El Ex Hotel Pirehueico, se ubica en la localidad de Pirehueico, para acceder a
+ella, hay que cruzar en la barcaza del lago del mismo nombre, trayecto que tiene
+una duración aproximada de una hora y media. Luego de visitar Puerto Fuy te
+recomendamos regresar por la misma ruta T-203 hacia Panguipulli, para luego
+detenerse en Punahue, sector caracterizado por la presencia y ocupación resistente
+de comunidades mapuche. 
+<p style="font-style: italic; text-align: right;""> Triptico </p><br>
+ <h4>
+
+
+ `)
+});
+
+
+var marker = L.marker([-39.836791, -72.0838169],{icon: memorial}).addTo(mapa) ;marker.on('click', function() 
+  {openPanel(`<h3>Memorial de Miguel Cabrera “Paine”</h3>
+<h4>Memorial levantado en recuerdo del militante del MIR Miguel Cabrera
+Fernández, “Paine”, Jefe del Destacamento Guerrillero Toqui Lautaro, muerto
+en combate el 15 de octubre de 1981 en el contexto de la “Operación Retorno”,
+realizada por militantes del MIR que ingresaron clandestinamente al país con el
+objetivo de establecer una base cordillerana en el sur del país, levantando un
+campamento de guerrilleros, específicamente en la zona de Neltume. <h4>
+ `)
+});
+
+ var marker = L.marker([-39.823278, -71.962706],{icon: memorial}).addTo(mapa) ;marker.on('click', function() 
+  {openPanel(`<h3>Remeco Alto</h3>
+<h4>Este fue el camino elegido por los integrantes del “Destacamento Guerrillero
+Toqui Lautaro”, para instalar la resistencia. En 1980 ingresaron desde el exilio con
+el objetivo de construir un frente guerrillero en la cordillera de Neltume y sumar
+fuerzas en la lucha frontal en contra de la dictadura.<br>
+De acuerdo al Informe Rettig, en junio de 1981 fue denunciada por campesinos
+de la zona de Neltume, la existencia de un campamento de guerrilleros en ese
+sector. Se trataba de militantes del MIR ingresados clandestinamente al país como
+parte de la llamada Operación Retorno, quienes intentaban establecer una base en
+la zona cordillerana del sur el país, donde se instalaría a futuro la dirigencia de su
+colectividad. A raíz de esta información se inició un intenso operativo con agentes
+de la CNI enviados desde Santiago y personal de Carabineros y del Ejército. <br>
+En julio de 1981 el campamento fue descubierto por los efectivos de
+seguridad, mientras se encontraba en etapa de construcción. En esa oportunidad
+fue incautada una gran cantidad de material y documentación. Por esa fecha el
+grupo se dividió y tres de ellos se dirigieron al sector de Remeco Alto, a casa de
+una pariente de uno de ellos, con el fin de obtener alimentos. Los militares fueron
+alertados de la presencia de estas personas por los propios moradores de la casa y
+los sorprendieron mientras dormían, dándoles muerte. <br>
+Fallecieron así los obreros
+<a href="https://interactivos.museodelamemoria.cl/victimas/?p=2344" target="_blank">Patricio Alejandro Calfuquir Henríquez</a> de 28 añosy
+<a href="https://interactivos.museodelamemoria.cl/victimas/?p=2016" target="_blank">Próspero del Carmen Guzmán Soto</a> de 27 años
+  en el interior de la vivienda, la que quedó totalmente
+destruida por los disparos. 
+<a href="https://interactivos.museodelamemoria.cl/victimas/?p=1760" target="_blank">José Eugenio Monsalve Sandoval</a> de 27 años, también obrero,
+alcanzó a huir algunos metros de la casa, siendo alcanzado y ejecutado. Le consta
+a la Comisión que en ninguna de estas muertes hubo resistencia previa por parte
+de las víctimas. Todo esto sucedió el 20 de septiembre de 1981 y en el año 2001 se
+levantó en el lugar un memorial en recuerdo de lo ocurrido.<br>
+Este Memorial se encuentra al interior del Fundo, por ello no es visitable, pero te
+sugerimos observar y ver en el camino la señalética puesta por el Centro Cultural,
+en distintas partes marcando los puntos importantes.x
+Para continuar, dirígete hacia el pueblo de Choshuenco, donde habitan cerca
+de 700 personas, a 16 kilómetros al oeste de Neltume. En Choshuenco en el interior
+está el Memorial de Miguel Cabrera “Paine”.
+
+<p style="font-style: italic; text-align: right;""> Triptico </p><br>
+ <h4>
+
+
+ `)
+});
+
+
+
+ var marker = L.marker([-39.837134, -73.239760],{icon: memorial}).addTo(mapa) ;marker.on('click', function() 
+  {openPanel(`<h3>Calle Inglaterra 471</h3>
+
+
+<h4> El día 28 de septiembre el Diario El Mercurio informa: “caen detenidos el ex
+diputado del Partido Socialista 
+<a href="https://interactivos.museodelamemoria.cl/victimas/?p=490" target="_blank">Luis Espinoza Villalobos</a> de 33 años
+y el Médico mirista 
+Bruno García Morales, en un allanamiento practicado en el domicilio del médico. El
+radiograma llegado a la policía civil dice que ambos estaban escondidos en la
+Población ‘Huachocopihue’, calle Inglaterra 471 hasta el dia de hoy.
+<br>Posteriormente
+ <a href="https://interactivos.museodelamemoria.cl/victimas/?p=490" target="_blank">Luis Espinoza Villalobos</a> fue asesinado ”
+  fue aseisnado en el regimiento de Puerto Montt
+<p style="font-style: italic; text-align: right;"> Triptico </p><br>
+ <h4>
+  
+ `)
+});
+
+
+ var marker = L.marker([-39.813565, -73.241661],{icon: memorial}).addTo(mapa) ;marker.on('click', function() 
+  {openPanel(`<h3>Ex Cuartel de Investigacion</h3>
+<h4> Según consta en los antecedentes recabados por la Comisión Valech, el mayor
+número de detenidos en este recinto se registró entre los años 1973 y 1975. Sin
+embargo, esta casona de dos pisos fue demolida y actualmente se encuentra una
+feria artesanal llamada Mi Pueblito.
+De acuerdo a los testimonios recabados, se señala que los detenidos, hombres
+y mujeres, eran mantenidos en calabozos en el subterráneo del edificio y en una
+pequeña sala de aislamiento, vendados e incomunicados. En los testimonios se
+consignó que sufrieron golpizas, aplicación de electricidad, vejaciones y amenazas.
+<p style="font-style: italic; text-align: right;"> Triptico </p><br>
+ <h4>
+ `)
+});
+
+ var marker = L.marker([-39.837502, -73.222107],{icon: memorial}).addTo(mapa) ;marker.on('click', function() 
+  {openPanel(`<h3>Campamento Chorrillos</h3>
+<h4> El Campamento Chorrillos constituye uno de los sectores emblemáticos en
+cuanto a la pobreza, marginación, estigmatización, represión, resistencia anti
+dictatorial y auto-organización popular para satisfacer necesidades comunitarias
+durante la década de los ’80 en la ciudad de Valdivia y nace durante el movimiento
+de los sin casa de la década de 1960.<br>
+Las primeras ‘tomas urbanas’ de terreno en Valdivia fueron impulsadas por
+el MIR. Si bien muchas poblaciones existentes en la ciudad de Valdivia fueron
+consecuencia a las necesidades de los damnificados del terremoto de mayo de
+1960, se sumó a ello la ausencia de soluciones habitacionales, dando origen a las
+‘tomas’ de terrenos, siendo la primera de ellas, aquella emplazada en las cercanías
+del cruce de las avenidas Picarte con Simpson, donde 10 jóvenes familias se
+instalaron con sus “rucos”, dando origen al campamento Vietnam Heroico. Con los
+días se les unieron más familias, alcanzando a cerca de 1.000 en total, las que, a lo
+largo de los años, fueron desplazándose hacia el sector de la Pampa Krahmer
+go de los años, fueron desplazándose hacia el sector de la Pampa Krahmer.
+De acuerdo a testimonios rescatados por el trabajo de la antropóloga Bernarda Aucapan:<br>
+<br><p style="font-style: italic; text-align: right;">“Se empieza a buscar gente capacitada dentro de la toma, con los dirigentes que
+había del MIR y se hace como una asamblea con la gente y pasan a ser dirigentes
+las personas que empiezan a no aceptar tragos dentro del campamento, una hora
+de llegada, no peleas dentro de los matrimonios…porque la cosa tenía que ser bien
+ordenada, de cocinarse a hacerse una olla común, donde todos podían participar y se
+empiezan a entablar con las autoridades de turno en ese momento”.</p><br>
+<p style="font-style: italic; text-align: right;"> Triptico </p><br>
+ <h4>
+ `)
+});
+
+ var marker = L.marker([-40.383681, -73.002411],{icon: memorial}).addTo(mapa) ;marker.on('click', function() 
+  {openPanel(`<h3>Puente Pilmaiquén</h3>
+<h4> Según consta en los antecedentes recabados por la Comisión Valech, el mayor
+número de detenidos en este recinto se registró entre los años 1973 y 1975. Sin
+embargo, esta casona de dos pisos fue demolida y actualmente se encuentra una
+feria artesanal llamada Mi Pueblito.<br>
+De acuerdo a los testimonios recabados, se señala que los detenidos, hombres
+y mujeres, eran mantenidos en calabozos en el subterráneo del edificio y en una
+pequeña sala de aislamiento, vendados e incomunicados. En los testimonios se
+consignó que sufrieron golpizas, aplicación de electricidad, vejaciones y amenazas.
+<p style="font-style: italic; text-align: right;"> Triptico </p><br>
+ <h4>
+ `)
+});
+
+ var marker = L.marker([-40.329849, -72.225219],{icon: memorial}).addTo(mapa) ;marker.on('click', function() 
+  {openPanel(`<h3>Puente Riñinahue</h3>
+<h4> Desde la Tenencia de Carabineros de San Pablo, en La Unión se da la orden del
+Teniente Nelson Rodríguez de detener a todos los partidarios de la Unidad Popular.
+Las personas eran interrogadas y trasladadas a la Fiscalía Militar y no a la 3º Comisaría
+y ese terror recorrió todas las comunas que son parte de esta provincia, llegando
+hasta los lugares más apartados, como es el caso de Riñinahue.
+<br><a href="https://interactivos.museodelamemoria.cl/victimas/?p=1163" target="_blank">Cardenio Ancacura Manquian</a>  de 20 años
+fue detenido por Carabineros de Lago Ranco
+y trasladado a la tenencia del lugar. Desde allí fue sacado el 16 de octubre, por
+efectivos de la Gobernación Marítima de Valdivia, dependiente de la Armada de
+Chile; lo subieron a bordo del vapor “Laja” y lo ejecutaron, lanzando su cuerpo al
+lago. Él era agricultor, casado y con cuatro hijos. Actualmente sigue desaparecido.
+Después de detenerte en este punto, te recomendamos que sigas por la ruta T-85
+para dirigirte al retén de Riñinahue.
+<p style="font-style: italic; text-align: right;"> Triptico </p><br>
+ <h4>
+ `)
+});
+
+
+ var marker = L.marker([-40.329849, -72.225219],{icon: memorial}).addTo(mapa) ;marker.on('click', function() 
+  {openPanel(`<h3>Fundo Arquilhue</h3>
+<h4> Ubicado en la precordillera, a casi 300 km. de Valdivia, el fundo “Chihuío”
+sirvió como centro de detención y tortura para las fuerzas represivas de la región.
+Campesinos de Futrono, Llifén, Curriñe, Arquilhue y Chabranco fueron llevados desde
+sus hogares o lugares de trabajo hasta esta localidad, después de ser detenidos por
+soldados pertenecientes a la IV División del Ejército, al mando del General Héctor
+Bravo Muñoz y apoyados por civiles de la localidad, incluyendo a Américo González.<br>
+Los soldados habían llegado hasta las diferentes localidades con lista en mano.<br>
+Según testigos, los detenidos fueron duramente golpeados durante su
+detención y trasladados en camiones del ejército hasta el fundo “Chihuío”, donde
+fueron salvajemente torturados y luego asesinados. Se cree que todos murieron
+lentamente, a causa de las torturas.
+
+<p style="font-style: italic; text-align: right;"> Triptico </p><br>
+ <h4>
+ `)
+});
+
+ var marker = L.marker([-40.2245019, -72.382421],{icon: memorial}).addTo(mapa) ;marker.on('click', function() 
+  {openPanel(`<h3>Isla Huapi</h3>
+
+<h4> Esta localidad se destaca por ser parte de una Comunidad Mapuche que ha
+habitado la Isla de manera ancestral. Recuerdan que para el año 1973, varios de los
+jóvenes fueron detenidos acusados de militar en un partido de izquierda y fueron
+transportados al Retén de Carabineros de Llifén y posteriormente, algunos de ellos,
+trasladados a otros sectores. Se cuenta que varios de estos fueron arrojados al lago
+desde un helicóptero.
+Puedes seguir hacia el pueblo de Futrono por la misma ruta T-55 hasta la avenida
+Balmaceda, allí se encuentra el Retén de Carabineros. 
+
+<p style="font-style: italic; text-align: right;"> Triptico </p><br>
+ <h4>
+ `)
+});
 
 </script>
 </body>
 </html>
-
-git remote add origin https://github.com/Vregorio666/Mmp.git
-git branch -M main
-git push -u origin main
-
-
 
