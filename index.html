@@ -294,13 +294,14 @@ h4 {
 <script>
 // Inicio mapa
 var mapa = L.map('mapa').setView([-39.95, -72.8], 9);
-	});
 // Capa OSM
-	var osm = L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_toner_lite/{z}/{x}/{y}{r}.{ext}', 
-						  { minZoom: 9, maxZoom: 20, attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" 
-							  target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors', ext: 'png' }); 
-	osm.addTo(mapa);													  });.
-	
+var osm =   L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_toner_lite/{z}/{x}/{y}{r}.{ext}', {
+	minZoom: 9,
+	maxZoom: 20,
+	attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+	ext: 'png'
+});
+osm.addTo(mapa);
 
 // Alternar entre páginas al pulsar botones
 document.querySelectorAll('.tab-dot').forEach(dot => {dot.addEventListener('click', () => {
@@ -1478,11 +1479,4 @@ Balmaceda, allí se encuentra el Retén de Carabineros.
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
 
