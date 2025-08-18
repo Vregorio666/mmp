@@ -14,11 +14,20 @@
   padding: 0;
 }
 
+h1 {
+       font-size: 22px;
+  font-family:'Courier New', Courier, monospace;
+  font-weight: bold;
+  color: rgb(0, 0, 0);
+    text-decoration: underline;
+    }
+
+
 h2 {
        font-size: 12px;
   font-family:monospace;
   font-weight: bold;
-  line-height: 2;
+  line-height: 1.8;
   color: rgb(0, 0, 0);
    margin: 1px;   /* elimina espacio extra arriba y abajo */
   padding: 1px;
@@ -66,20 +75,12 @@ h4 {
 
 #info-titulo {
 
-  position: fixed;
+  position: absolute;
   top: 2%;
   right: 42%;
   width: auto;
   height: auto;
   max-height: 85%;
-  border: 2px solid #050101;
-  background: rgba(255, 255, 255, 0.411);
-  padding-top: 5px;
-  padding-bottom: 5px;
-  padding-left: 10px;
-  padding-right: 10px;
-  border-radius: 10px;
-  box-shadow: -2px 0 5px rgba(0,0,0,0.3);
   z-index: 1000;
 ;
 }
@@ -96,13 +97,13 @@ h4 {
   top: 90%;
   right:38%;
   width: auto;
-  height: 5%;
+  height: 5.5%;
   max-height: 85%;
   border: 2px solid #050101;
   background: rgba(255, 255, 255, 0.908);
-  padding: 0px;
+  padding: 1px;
   padding-top: 1px;
-  padding-bottom: 2px;
+  padding-bottom: 3px;
   padding-left: 15px;
   padding-right: 15px;
   border-radius: 10px;
@@ -235,7 +236,7 @@ h4 {
 }
 
 
-@media (max-width: 100%) {
+@media (max-width: 768px) {
 
   h2 { font-size: 10px; line-height: 1.4; }
   h3 { font-size: 14px; }
@@ -243,17 +244,20 @@ h4 {
 
   #info-logo {
     position: fixed;
-    top: 5%;
-    left: 5p%
+    top: 5px;
+    left: 5px;
     right: auto;
     width: 120px;
   }
 
   #info-titulo {
     top: auto;
-    bottom: 5%;
-    right: 5%;
+    bottom: 10px;
+    right: 10px;
     font-size: 14px;
+   font-family: 'Courier New', Courier, monospace;
+    
+    padding: 5px;
   }
 
   #info-frase {
@@ -304,8 +308,7 @@ h4 {
     right: 0;
   }
 }
- 
- 
+
 
 
 </style>
@@ -313,12 +316,12 @@ h4 {
 <body>
   
     <div id="mapa"style></div>
-    <div id="info-titulo"><h3>Mapa de la Memoria</h3></div>
+    <div id="info-titulo"><h1>Mapa de la Memoria</h1></div>
      <div id="info-logo"><img src="./Casa_memoria.png" alt="Casa de la Memoria" style="width:100%; border-radius:8px; margin-top:10px;"></div>
     <div id="info-frase"> <h2>"Es vital entender que ellos no son solo una fotografía en una pancarta: eran seres humanos,
-      personas sensibles, de carne y hueso, como usted, como yo, que tenían hermosos sueños y por eso fueron considerados peligrosos.<br>
-      <br>¿Era neccesario para los que detentan el poder hacerlos desaparecer como si nunca hubieran existido?"<br>
-    <p style="text-align: right;">- Ana Gonzalez de Recabarren</p> </h2></div>
+      personas sensibles, de carne y hueso, como usted, como yo, que tenían hermosos sueños y por eso fueron considerados peligrosos.
+      <br><p style="padding-top: 0;">¿Era neccesario para los que detentan el poder hacerlos desaparecer como si nunca hubieran existido?"</p>
+    <p style="text-align: right;">- Ana González de Recabarren</p> </h2></div>
     <div id="info-leyenda">
   <div class="item">
     <img src="./clavel.png" alt="Memorial"> <span><h5>Sitio de Memoria</h5></span></div>  
@@ -356,9 +359,11 @@ h4 {
 // Inicio mapa
 var mapa = L.map('mapa').setView([-39.95, -72.8], 9);
 // Capa OSM
-var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+var osm =   L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_toner_lite/{z}/{x}/{y}{r}.{ext}', {
+	minZoom: 9,
+	maxZoom: 20,
+	attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+	ext: 'png'
 });
 osm.addTo(mapa);
 
@@ -438,7 +443,7 @@ Niebla (en noviembre de 1984), y otros a un recinto CNI en caleta Miramar, Pellu
       <h3>Galería de imágenes</h3>
       <div style="display:flex; flex-direction:column; gap:10px;">
         <img src="./Casa_memoria.png" alt="Casa de la Memoria 1" style="width:100%; border-radius:8px;">
-        <img src="./Clavel.png" alt="Casa de la Memoria 2" style="width:100%; border-radius:8px;">
+        <img src="./clavel.png" alt="Casa de la Memoria 2" style="width:100%; border-radius:8px;">
         <img src="./foto3.jpg" alt="Casa de la Memoria 3" style="width:100%; border-radius:8px;">
       </div>`,
     
@@ -523,10 +528,12 @@ en ocasiones con paleta de madera, amenazas, simulacro de fusilamiento, y prolon
  ;marker.on('click', function() {
     openPanel(`<h3>Regimiento Cuartel Bueras <h3>
 <h4>
- En este recinto funcionaron el Regimiento de Telecomunicaciones Nº4
-Membrillar, el Regimiento Caballería Blindada N°2 Cazadores, el Regimiento de
-Artillería N°2 Maturana y la Fiscalía Militar de Valdivia <br>
-<br>
+ En este recinto funcionaron: 
+
+<a href="https://memoriaviva.com/nuevaweb/centros-de-detencion/x-region/regimiento-de-artilleria-n-2-maturana-valdivia/" target="_blank">el Regimiento de Artillería N°2 Maturana</a>, 
+<a href="https://memoriaviva.com/nuevaweb/centros-de-detencion/x-region/regimiento-de-caballeria-blindada-no-2-cazadores/" target="_blank">el Regimiento Caballería Blindada N°2 Cazadores</a>, 
+<a href="https://memoriaviva.com/nuevaweb/centros-de-detencion/x-region/regimiento-de-telecomunicaciones-no-4-membrillar-valdivia/" target="_blank"> el Regimiento de Telecomunicaciones Nº4 Membrillar</a>, y la
+<a href="https://memoriaviva.com/nuevaweb/centros-de-detencion/x-region/fiscalia-militar-de-valdivia/" target="_blank"> Fiscalia militar de valdivia</a>,
 Según antecedentes recabados por la Comisión Valech el mayor número de
 detenidos en los recintos militares de la ciudad de Valdivia se concentró entre
 los meses de septiembre y octubre del año 1973, momento en que los cuatro
@@ -548,6 +555,40 @@ siendo objeto de golpizas (algunos con varillas de mimbre), aplicación de
 electricidad, simulacros de fusilamiento, el submarino en aguas servidas, extracción
 de uñas, obligación de permanecer en posiciones forzadas, colgamientos y
 quemaduras con cigarrillos.
+
+<p style="font-style: italic;">" Según los datos recabados, el mayor número de detenidos se dio entre septiembre y
+octubre del año 1973.
+Se trata de un recinto que concentraba cuatro regimientos ubicados en la ciudad de
+Valdivia. Muchos de los prisioneros, hombres y mujeres, fueron trasladados desde
+recintos como la cárcel o comisarías de Valdivia y otras ciudades. Varios eran traídos
+luego de ser detenidos durante operativos militares en zonas rurales, especialmente
+en la precordillera de Valdivia. Los declarantes afirmaron que llegaban en camiones,
+hacinados y en muy malas condiciones físicas. Por las características del lugar, es
+probable que los detenidos no supieran con certeza en cual de los tres regimientos
+se encontraban.<br>
+Se los mantuvo al interior del regimiento en el gimnasio, en galpones y en las caballerizas,
+incomunicados, encapuchados durante varios días, privados de alimento yagua. Hay víctimas que denunciaron haber sido rapadas al ingresar.
+La Fiscalía Militar de Valdivia funcionó en el Regimiento N° 2 Cazadores, por lo cual
+muchos prisioneros fueron llevados desde la cárcel u otros recintos por personal del
+Servicio de Inteligencia Militar (SIM) para ser interrogados.
+Ex presos políticos denunciaron haber sufrido golpes, algunos con varillas de mimbre;
+aplicación de electricidad, simulacros de fusilamiento, el submarino en agua con inmundicias, extracción de uñas, obligación de permanecer en posiciones forzadas, colgamientos
+y quemaduras con cigarrillos.<br>
+Luego de un tiempo eran trasladados a la Comisaría de Valdivia, a la cárcel o al recinto
+de reclusión ubicado en el gimnasio del Banco del Estado-Cendyr . </a>
+<p style="font-style: italic; text-align: right;">Comision Valech p 396</p><br>
+
+En el regimiento de la caballeria blindada, fue asesiando 
+<a href="https://memoriaviva.com/nuevaweb/detenidos-desaparecidos/desaparecidos-b/buchhorsts-fernandez-jose-gaston/" target="_blank">José Gastón Buchhorsts fernandez, 19 años</a>
+José Gastón Buchhorsts fernandez<br>
+<p style="font-style: italic;">"Esta persona desaparece desde ese recinto militar, luego de quedar detenido al
+presentarse con días de retraso, después de un permiso.  Su familia declara que en
+dicho Regimiento, fue informada verbalmente, que había sido ejecutado luego de
+intentar una fuga.  Sin embargo, sus restos nunca fueron entregados y su muerte
+no se encuentra registrada oficialmente.</p>
+<p style="font-style: italic; text-align: right;"> Informe Rettig p388 </p><br>
+
+
 
 <br> <h4>`, { maxWidth: 800 })
  });;
@@ -651,25 +692,32 @@ interrogados y sometidos a brutales torturas.<br>
 
  <br>
 Las victimas eran :<br>
-
- <a href="https://interactivos.museodelamemoria.cl/victimas/?p=280" target="_blank">Pedro Purísimo Barria Ordóñez, 22 años</a>
- <a href="https://interactivos.museodelamemoria.cl/victimas/?p=2340" target="_blank">José René Barrientos Warner, 29 años</a>
- <a href="https://interactivos.museodelamemoria.cl/victimas/?p=2332" target="_blank">Sergio Jaime Bravo Aguilera, 21 años</a>
- <a href="https://interactivos.museodelamemoria.cl/victimas/?p=551" target="_blank">Santiago Segundo Garcia Morales ,26 años</a>
- <a href="https://interactivos.museodelamemoria.cl/victimas/?p=130" target="_blank">José Gregorio Liendo Vera, 28 años</a>
- <a href="https://interactivos.museodelamemoria.cl/victimas/?p=2228" target="_blank">Luis Enrique del Carmen Guzman Soto, 21 años</a>
- <a href="https://interactivos.museodelamemoria.cl/victimas/?p=646" target="_blank">Fernando Krauss Iturra, 24 años</a>
- <a href="https://interactivos.museodelamemoria.cl/victimas/?p=1160" target="_blank">Luis Hernán Pezo Jara, 29 años</a>
- <a href="https://interactivos.museodelamemoria.cl/victimas/?p=2584" target="_blank">Víctor Eugenio Rudolf Reyes, 32 años</a>
- <a href="https://interactivos.museodelamemoria.cl/victimas/?p=1104" target="_blank">Rudemir Saavedra Bahamondes, 29 años</a>
- <a href="https://interactivos.museodelamemoria.cl/victimas/?p=1944" target="_blank">Víctor Segundo Saavedra Muñoz, 19 años</a>
- <a href="https://interactivos.museodelamemoria.cl/victimas/?p=2016" target="_blank">Luis Mario Valenzuela Ferrada, 20 años</a>
-
-
-`, {maxWidth: 600 } )
+<br> <a href="https://memoriaviva.com/nuevaweb/detenidos-desaparecidos/desaparecidos-b/barria-ordonez-pedro-purisimo/" target="_blank">Pedro Purísimo Barria Ordóñez, 22 años</a>
+<br> <a href="https://memoriaviva.com/nuevaweb/detenidos-desaparecidos/desaparecidos-b/barrientos-warner-jose-rene/" target="_blank">José René Barrientos Warner, 29 años</a>
+<br><a href="https://memoriaviva.com/nuevaweb/detenidos-desaparecidos/desaparecidos-b/bravo-aguilera-sergio-jaime/" target="_blank">Sergio Jaime Bravo Aguilera, 21 años</a>
+ <br><a href=https://memoriaviva.com/nuevaweb/detenidos-desaparecidos/desaparecidos-b/garcia-morales-santiago-segundo/" target="_blank">Santiago Segundo Garcia Morales ,26 años</a>
+<br> <a href="https://memoriaviva.com/nuevaweb/detenidos-desaparecidos/desaparecidos-b/liendo-vera-jose-gregorio/" target="_blank">José Gregorio Liendo Vera, 28 años</a>
+ <br><a href="https://memoriaviva.com/nuevaweb/detenidos-desaparecidos/desaparecidos-b/guzman-soto-luis-enrique-del-carmen/" target="_blank">Luis Enrique del Carmen Guzman Soto, 21 años</a>
+ <br><a href="https://memoriaviva.com/nuevaweb/detenidos-desaparecidos/desaparecidos-b/krauss-iturra-victor-fernando/" target="_blank">Fernando Krauss Iturra, 24 años</a>
+ <br><a href="https://memoriaviva.com/nuevaweb/detenidos-desaparecidos/desaparecidos-b/pezo-jara-luis-hernan" target="_blank">Luis Hernán Pezo Jara, 29 años</a>
+ <br><a href="https://memoriaviva.com/nuevaweb/detenidos-desaparecidos/desaparecidos-b/rudolf-reyes-victor-eugenio/" target="_blank">Víctor Eugenio Rudolf Reyes, 32 años</a>
+ <br><a href="https://memoriaviva.com/nuevaweb/detenidos-desaparecidos/desaparecidos-b/saavedra-bahamondes-rudemir/" target="_blank">Rudemir Saavedra Bahamondes, 29 años</a>
+ <br><a href="https://memoriaviva.com/nuevaweb/detenidos-desaparecidos/desaparecidos-b/saavedra-munoz-victor-segundo/" target="_blank">Víctor Segundo Saavedra Muñoz, 19 años</a>
+ <br><a href="https://memoriaviva.com/nuevaweb/detenidos-desaparecidos/desaparecidos-b/valenzuela-ferrada-luis-mario/" target="_blank">Luis Mario Valenzuela Ferrada, 20 años</a>
+<br>`,
+`<p style="font-style: italic> Los días 3 y 4 de octubre de 1973, fueron ejecutados en cumplimiento de una
+sentencia del Consejo de Guerra de Valdivia, las siguientes personas, en su
+mayoría militantes del MIR-MCR (Movimiento Campesino Revolucionario),
+todos acusados de asaltar el Retén de Carabineros de Neltume el día 12 de
+septiembre de 1973. <br>
+Múltiples versiones de prensa de la época hacen referencia a la tramitación de este
+Consejo de Guerra.  Una comunicación oficial de sus ejecuciones señala que se
+les habría acusado de varios delitos, entre ellos, el asalto al Retén de Neltume.
+</p>
+<p style="font-style: italic; text-align: right;"> Informe Rettig p388 </p><br>`,{maxWidth: 600 } )
  });;
 
- // Panguipulli
+ // Panguipull
 
  var marker = L.marker([-39.641441, -72.336967], {icon: CCDD}).addTo(mapa)
  ;marker.on('click', function() {
@@ -751,7 +799,36 @@ como lugar de detencion de presos politicos.<h4>`, {maxWidth: 600})
   <br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=1756" target="_blank">Carlos Alberto Cayumán Cayumán, 31 años</a>
   <br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=1622" target="_blank">Isaías José Fuentealba Calderón, 29 años</a>
   <br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=1167" target="_blank">Bernarda Rosalba Vera Contardo, 27 años</a>
-`, {maxWidth:800})
+<br><br>
+
+<p style="font-style: italic;">Se ha podido acreditar que las detenciones fueron practicadas por personal
+uniformado, quienes portaban una lista con los nombres de los detenidos,
+confeccionada por civiles que también participaron en éstas.  Los agentes
+aprehensores  fueron  guiados  por  el  sector  por  algunos  funcionarios  de
+Carabineros de la dotación del Retén de Liquiñe.
+Los efectivos militares vestían uniforme de combate y se identificaron como
+"militares" ante los familiares, señalando que los detenidos regresarían a sus casas
+tan pronto como prestaran algunas declaraciones.  Testimonios recibidos por esta
+Comisión permiten presumir que los uniformados pertenecían al Grupo Nº 3 de
+Helicópteros Maquehua ubicado en la ciudad de Temuco y pertenecientes a la
+Fuerza Aérea.
+Se movilizaban en un vehículo particular, una camioneta del Servicio Agrícola y
+Ganadero (SAG), un vehículo policial y en la ambulancia del Retén de Liquiñe;
+contaron también con el apoyo de un helicóptero.
+Actuaron divididos en varios grupos, que se juntaron en el cruce de Coñaripe,
+cercano a todos los lugares en que se practicaron las detenciones.  Allí tomaron el
+camino a Villarrica y en el puente sobre el río Toltén, ubicado a la entrada de la
+ciudad, les dieron muerte y arrojaron sus cuerpos a las aguas.  Dos de ellos fueron
+reconocidos por los lugareños, antes de sumergirse definitivamente en el río.</p>
+<p style="font-style: italic; text-align: right;"> Informe Rettig p393 </p><br>
+  `
+
+
+
+
+
+
+, {maxWidth:800})
  });;
 
  var marker = L.marker([-39.851113, -71.947269],{icon: CCDD}).addTo(mapa)
@@ -898,7 +975,51 @@ eran interrogados en las aulas de la escuela.<h4>`, {maxWidth: 600 } ) });;
 <br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=1473" target="_blank">Ricardo Segundo Ruiz Rodriguez, 24 años</a>
 <br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=890" target="_blank">Carlos Vicente Salinas Flores, 21 años</a>
 <br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=910" target="_blank">Manuel Jesús Sepulveda Rebolledo, 28 años</a>
-<br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=947" target="_blank">Rubén Vargas Quezada, 56 años</a>`, {maxWidth: 800})
+<br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=947" target="_blank">Rubén Vargas Quezada, 56 años</a><br>
+
+
+<p style="font-style: italic;">
+  Ese día 9 de octubre, un convoy militar procedente de los Regimientos Cazadores
+y Maturana, ambos con asiento en la ciudad de Valdivia, compuesto por varios
+vehículos entre jeeps y camiones y con una dotación aproximada de noventa
+personas, inició una caravana hacia el Sector Sur del Complejo Maderero
+Panguipulli.
+En  las  localidades  de  Chabranco,  Curriñe,  Llifén  y  Futrono  los  militares
+detuvieron desde sus domicilios o lugares de trabajo, o recibieron de manos de
+Carabineros, a los campesinos antes indicados.
+La noche del mismo 9 de octubre de 1973 se les condujo a un fundo de propiedad
+de un civil en el sector cordillerano denominado Baños de Chihuío.  En una hora
+no precisada, los prisioneros fueron sacados de la casa patronal de ese fundo y
+llevados a las inmediaciones a una distancia aproximada de 500 metros, lugar en
+el cual se les ejecutó.
+Al día siguiente, esto es, el 10 de octubre de 1973, un testigo reconoció en ese
+lugar a varias de las víctimas y pudo percibir que la mayoría los cuerpos tenían
+cortes en las manos, en los dedos, en el estómago e incluso algunos se
+encontraban degollados y con sus testículos cercenados, sin poder observar
+huellas de impactos de bala en los restos.
+Los cadáveres de los ejecutados permanecieron en el lugar de su ejecución
+durante   varios   días,   cubiertos   tan   sólo   con   algunas   ramas   y   troncos.
+Aproximadamente unos quince días después de la ejecución, fueron enterrados
+por los efectivos militares en fosas de diferentes dimensiones.
+En fecha que no es posible precisar, pero que podría corresponder a fines del año
+1978 o principios de 1979, en horas de la noche, personas de civil llegaron hasta
+la casa patronal del Fundo Chihuío y exigieron al dueño que les indicara el lugar
+en que se encontraban las fosas.  Estos civiles, asociados de otros que les
+acompañaban,  excavaron  durante  toda  la  noche  en  el  lugar  de  las  fosas,
+trasladando los restos a un lugar que hasta la fecha de este informe ha sido
+imposible de determinar.
+La circunstancia del fallecimiento de las personas ejecutadas en la localidad de
+Chihuío  consta  inexplicablemente  en  certificados  de  defunción,  sin  haber
+existido© entrega de cadáver ni sepultación.  En todos ellos se indica que la data
+de fallecimiento es de fecha 9 de octubre de 1973, en la localidad de "Liquiñe",
+por causas no precisadas, acreditándose el fallecimiento mediante el testimonio de
+dos personas singulares (testigos de la defunción).
+</p>
+<p style="font-style: italic; text-align: right;"> Informe Rettig</p><br>
+
+
+
+`, {maxWidth: 800})
  });;
 
 var marker = L.marker([-40.198930, -72.259331
@@ -930,11 +1051,20 @@ amenazas de fusilamiento, fueron obligados a beber agua con orina y excrementos 
 En la noche de ese día fueron subidos al Vapor "Laja", donde fueron ejecutados. Sus cuerpos fueron lanzados al lago, 
 sin que hayan sido encontrados hasta la fecha.<br>
 
+<p style="font-style: italic;">"El 16 de octubre de 1973, fueron muertos a bordo del vapor Laja, por personal de
+la Gobernación Marítima de Valdivia, dependiente de la Armada de Chile, las
+siguientes personas, cuyos cuerpos fueron arrojados a las aguas del lago Ranco:<br>
 
  <br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=563" target="_blank">Arturo Vega González, 20 años</a>
 <br>  <a href="https://interactivos.museodelamemoria.cl/victimas/?p=866" target="_blank">Teófilo González Calfulef, 24 años</a>
   <br><a href="https://interactivos.museodelamemoria.cl/victimas/?p=1165" target="_blank">Manuel Jesús Hernández Inostroza, 42 años</a>
   <br><a href="https://interactivos.museodelamemoria.cl/victimas/?p=1163" target="_blank">Cardenio Ancacura Manquian, 20 años</a> <br>
+
+  <br>Todos fueron detenidos el día 16 de octubre de 1973 en sus domicilios de Lago
+Ranco y conducidos a la Tenencia de Carabineros de dicho pueblo.  En la noche
+de ese día fueron subidas al vapor Laja, donde fueron ejecutadas.  Sus cuerpos
+fueron lanzados al lago, sin que hayan sido encontrados hasta la fecha.</p>
+<p style="font-style: italic; text-align: right;"> Informe Rettig 395</p><br>
     `, {maxWidth: 600})
  
  });;
@@ -1133,8 +1263,76 @@ Aquí el detalle de los nombres de cada uno de ellos,
    <br><a href="https://interactivos.museodelamemoria.cl/victimas/?p=691" target="_blank">Daniel Antonio Castro López, 68 años</a>
   <br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=1756" target="_blank">Carlos Alberto Cayumán Cayumán, 31 años</a>
   <br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=1622" target="_blank">Isaías José Fuentealba Calderón, 29 años</a>
-  <br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=1167" target="_blank">Bernarda Rosalba Vera Contardo, 27 años</a>
- `)
+  <br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=1167" target="_blank">Bernarda Rosalba Vera Contardo, 27 años</a><br>
+
+
+  <p style="font-style: italic;"><br>El 10 de octubre de 1973 fueron detenidos en el caserío de Liquiñe unos 15
+trabajadores del Complejo Forestal Maderero Panguipulli, entre ellos varios
+miembros de las familias Tracanao y Reinante, José Fuentealba, jefe del predio
+Trafún, y Bernarda Vera Contardo, casada, una hija, profesora de la Escuela de
+Puerto Fuy en el Complejo Maderero y Forestal Panguipulli, y militante del MIR.
+Fue detenida el 10 de octubre de 1973 por efectivos de la FACH que pertenecían al
+Grupo N°3 de Helicópteros “Maquehue” ubicado en Temuco.
+La detención ocurrió en la localidad de Trafún, provincia de Valdivia, donde
+Bernarda había buscado refugio debido a que era intensamente buscada. Sus
+familiares habían recibido información de que se le buscaba por el asalto frustrado
+al Retén de Neltume. Versiones de testigos sobrevivientes dicen que ella no había
+participado en el frustrado asalto, pero que, debido a su militancia en el MIR y su
+relación con otras personas asociadas a este, a las que también se les responsabilizó
+por ese hecho, fue acusada de asalto.
+Dos días antes de su detención, en la zona de Panguipulli, Neltume y
+Choshuenco se había iniciado un vasto operativo de militares, efectivos de la
+Fuerza Aérea y Carabineros. Diariamente la prensa informaba sobre la búsqueda
+de “los extremistas”, haciendo mención especial al nombre de Bernarda Vera. Un
+reportaje de la época titula: “La Bernarda huye acosada por hambre y enfermedades”.
+La autoridad militar al más alto nivel de la zona informaba del resultado de los
+operativos, señalando el número de los detenidos.
+Ese mismo día 10 de octubre, se registran otras 15 personas detenidas que
+permanecen hasta hoy en calidad de detenidos desaparecidos. Los nombres
+son: Luis Rivera Catricheo, Eliseo Tracanao Pincheira, José y Alejandro Tracanao
+Pincheira, Salvador Alamos Rubilar, José Borquez Levicán, Alberto, Ernesto y
+Modesto Reinante Raipán, Luis Lagos Torres, Carlos Figueroa Zapata, Mauricio
+Curiñanco Reyes, Isaías Fuentealba Calderón y Daniel Castro López.
+Como los vehículos en que se movilizaban los militares no eran suficientes,
+fueron a buscar al pueblo de Liquiñe a un señor de apellido Carmache, a quien le
+pidieron su camioneta, llevando como chofer a Sixto Díaz. Por orden de los militares,
+alrededor de las dos de la madrugada del día 11 de octubre, subieron al vehículo
+a un grupo de prisioneros y los trasladaron hasta el puente Villarrica, sobre el río
+Toltén, lugar en el que los hicieron bajarse y obligaron a retirarse del lugar al chofer
+Sixto Díaz, a quien el vehículo le fue devuelto completamente ensangrentado. No
+se tuvo más información de las personas detenidas ese 10 de octubre de 1973.
+De acuerdo a testimonios recabados, la detención fue realizada por miembros de
+la FACH, Carabineros y civiles, en especial Luis García, quien facilitó las instalaciones
+para torturar a las personas. Luego se dirigieron al Puente de río Toltén, camino a
+Villarrica. A eso de las 2 de la madrugada los ejecutaron, lanzando los cuerpos al
+río en sacos con piedras para que no flotaran, los que, de igual forma subieron
+a la superficie. En cuanto Carabineros se percató de la situación los empujaron
+nuevamente a la corriente, logrando hacerlos desaparecer.</p><br>
+<p style="font-style: italic; text-align: right;"> Triptico </p><br>
+
+<br><p style="font-style: italic;">"Se ha podido acreditar que las detenciones fueron practicadas por personal
+uniformado, quienes portaban una lista con los nombres de los detenidos,
+confeccionada por civiles que también participaron en éstas.  Los agentes
+aprehensores  fueron  guiados  por  el  sector  por  algunos  funcionarios  de
+Carabineros de la dotación del Retén de Liquiñe.<br>
+Los efectivos militares vestían uniforme de combate y se identificaron como
+"militares" ante los familiares, señalando que los detenidos regresarían a sus casas
+tan pronto como prestaran algunas declaraciones.  Testimonios recibidos por esta
+Comisión permiten presumir que los uniformados pertenecían al Grupo Nº 3 de
+Helicópteros Maquehua ubicado en la ciudad de Temuco y pertenecientes a la
+Fuerza Aérea.<br>
+Se movilizaban en un vehículo particular, una camioneta del Servicio Agrícola y
+Ganadero (SAG), un vehículo policial y en la ambulancia del Retén de Liquiñe;
+contaron también con el apoyo de un helicóptero.<br>
+Actuaron divididos en varios grupos, que se juntaron en el cruce de Coñaripe,
+cercano a todos los lugares en que se practicaron las detenciones.  Allí tomaron el
+camino a Villarrica y en el puente sobre el río Toltén, ubicado a la entrada de la
+ciudad, les dieron muerte y arrojaron sus cuerpos a las aguas.  Dos de ellos fueron
+reconocidos por los lugareños, antes de sumergirse definitivamente en el río."</p>
+
+<p style="font-style: italic; text-align: right;"> Informe Rettig p393 </p><br>
+
+`)
 });
 
 
@@ -1183,19 +1381,96 @@ El memorial recuerda a 18 campesinos y obreros madereros de las localidades de F
 <br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=1473" target="_blank">Ricardo Segundo Ruiz Rodriguez, 24 años</a>
 <br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=890" target="_blank">Carlos Vicente Salinas Flores, 21 años</a>
 <br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=910" target="_blank">Manuel Jesús Sepulveda Rebolledo, 28 años</a>
-<br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=947" target="_blank">Rubén Vargas Quezada, 56 años</a>`)
+<br> <a href="https://interactivos.museodelamemoria.cl/victimas/?p=947" target="_blank">Rubén Vargas Quezada, 56 años</a><br>
+
+<br><p style="font-style: italic;">Ese día 9 de octubre, un convoy militar procedente de los Regimientos Cazadores
+y Maturana, ambos con asiento en la ciudad de Valdivia, compuesto por varios
+vehículos entre jeeps y camiones y con una dotación aproximada de noventa
+personas, inició una caravana hacia el Sector Sur del Complejo Maderero
+Panguipulli.
+En  las  localidades  de  Chabranco,  Curriñe,  Llifén  y  Futrono  los  militares
+detuvieron desde sus domicilios o lugares de trabajo, o recibieron de manos de
+Carabineros, a los campesinos antes indicados.
+La noche del mismo 9 de octubre de 1973 se les condujo a un fundo de propiedad
+de un civil en el sector cordillerano denominado Baños de Chihuío.  En una hora
+no precisada, los prisioneros fueron sacados de la casa patronal de ese fundo y
+llevados a las inmediaciones a una distancia aproximada de 500 metros, lugar en
+el cual se les ejecutó.
+Al día siguiente, esto es, el 10 de octubre de 1973, un testigo reconoció en ese
+lugar a varias de las víctimas y pudo percibir que la mayoría los cuerpos tenían
+cortes en las manos, en los dedos, en el estómago e incluso algunos se
+encontraban degollados y con sus testículos cercenados, sin poder observar
+huellas de impactos de bala en los restos.
+Los cadáveres de los ejecutados permanecieron en el lugar de su ejecución
+durante   varios   días,   cubiertos   tan   sólo   con   algunas   ramas   y   troncos.
+Aproximadamente unos quince días después de la ejecución, fueron enterrados
+por los efectivos militares en fosas de diferentes dimensiones.
+En fecha que no es posible precisar, pero que podría corresponder a fines del año
+1978 o principios de 1979, en horas de la noche, personas de civil llegaron hasta
+la casa patronal del Fundo Chihuío y exigieron al dueño que les indicara el lugar
+en que se encontraban las fosas.  Estos civiles, asociados de otros que les
+acompañaban,  excavaron  durante  toda  la  noche  en  el  lugar  de  las  fosas,
+trasladando los restos a un lugar que hasta la fecha de este informe ha sido
+imposible de determinar.
+
+La circunstancia del fallecimiento de las personas ejecutadas en la localidad de
+Chihuío  consta  inexplicablemente  en  certificados  de  defunción,  sin  haber
+existido© entrega de cadáver ni sepultación.  En todos ellos se indica que la data
+de fallecimiento es de fecha 9 de octubre de 1973, en la localidad de "Liquiñe",
+por causas no precisadas, acreditándose el fallecimiento mediante el testimonio de
+dos personas singulares (testigos de la defunción).
+</p>
+                               <p style="font-style: italic; text-align: right;"> Informe Rettig</p><br>`)
 });
 
 
    var marker = L.marker([-39.686294, -73.101902],{icon: memorial}).addTo(mapa) ;marker.on('click', function() 
   {openPanel(`<h3>Memorial Puente Pichoy</h3>
 <h4>
-Recuerda a:
+
+  <p style="font-style: italic;">El memorial recuerda el asesinato a mansalva del suplementero y militante
+comunista José Manuel Arriagada Cortés; el topógrafo y militante socialista José
+Gabriel Arriagada Zúñiga; José Manuel Carrasco Torres, contador y militante
+comunista; y Gilberto Antonio Ortega Alegría, empleado, dirigente sindical y
+militante socialista.
+De acuerdo a los testimonios de testigos, sistematizados en el Informe Valech,
+los detenidos en el Retén de Carabineros de Lanco fueron torturados, golpeados,
+pisoteados, amenazados y expuestos a intensa presión psicológica, para luego ser
+trasladados a la ciudad de Valdivia. Estos prisioneros fueron asesinados durante el
+trayecto con el pretexto de la ley de fuga en las cercanías del puente Pichoy, lugar
+donde se levantó este memorial.</p>
+
+<p style="font-style: italic; text-align: right;">triptico</p><br>
+
+<p style="font-style: italic;">"El día 12 de octubre de 1973, en el Puente Pichoy, Valdivia, fueron ejecutados
+por carabineros, tres de las siguientes personas, mientras la otra falleció producto
+de las torturas recibidas:<br>
+
 
 <br><a href="https://interactivos.museodelamemoria.cl/victimas/?p=2075" target="_blank">José Manuel Arriagada Cortes, 19 años</a>
 <br><a href="https://interactivos.museodelamemoria.cl/victimas/?p=2082" target="_blank">José Gabriel Arriagada Zuñiga, 30 años</a>
 <br><a href="https://interactivos.museodelamemoria.cl/victimas/?p=2187" target="_blank">José Manuel Carrasco Torres, 19 años</a>
-<br><a href="https://interactivos.museodelamemoria.cl/victimas/?p=563" target="_blank">Gilberto Antonio Ortega Alegria, 39 años</a>`)
+<br><a href="https://interactivos.museodelamemoria.cl/victimas/?p=563" target="_blank">Gilberto Antonio Ortega Alegria, 39 años</a><br>
+
+<br>Todos ellos fueron detenidos el día 10 de octubre de 1973 por Carabineros de
+Malalhue y de Lanco, y conducidos al Retén de Malalhue, siendo trasladados
+posteriormente a la Tenencia de Lanco, donde permanecieron hasta el día 12 de
+octubre de 1973.  En dicho recinto, producto de las torturas, falleció Gilberto
+Antonio Ortega Alegría, en presencia de testigos.  Al cabo de pocas horas, los
+otros tres detenidos y el cuerpo de Ortega fueron sacados de la Tenencia para ser
+trasladados a Valdivia.  José Gabriel Arriagada fue amarrado con José Manuel
+Arriagada, y Carrasco con el cuerpo de Ortega.
+Al llegar al Puente Pichoy, los detenidos fueron ejecutados.  Todos los cuerpos
+registraban múltiples impactos de bala.  Sus restos fueron entregados a sus
+familiares para su sepultación.  Versiones verbales entregadas a las familias por
+autoridades de Carabineros dieron como razón de la muerte el que los detenidos
+habrían intentado fugarse, sin dar explicaciones mas circunstanciadas sobre ello.
+
+
+<p style="font-style: italic; text-align: right;">Informe Rettig p394</p><br>
+
+
+`)
 });
 
 
@@ -1209,27 +1484,59 @@ estaba con él en el momento del allanamiento de su casa y ejecución de parte d
 
 
    var marker = L.marker([-39.848117, -73.197300],{icon: memorial}).addTo(mapa) ;marker.on('click', function() 
-  {openPanel(`<h3>Memorial de LLancahue</h3>
+  {openPanel(`<h3>Memorial de Llancahue</h3>
 <h4>
-Recuerda a 12 jóvenes miristas fusilados el 3 y 4 de octubre de 1973 sin juicio justo alguno, acusados falsamente de un supuesto asalto al retén de Neltume. La ejecución fue realizada en el marco de la Caravana de la Muerte en el interior del regimiento de caballería nº2 Cazadores de Valdivia, donde hoy se ubica la cárcel de la ciudad. La mayoría de las víctimas trabajaban en el Complejo Forestal y Maderero Panguipulli (COFOMAP) o eran jóvenes miristas. La reconstitución de escena en el marco de la investigación realizada por el ministro en visita Juan Guzmán reveló casi 30 años más tarde que el asalto realmente nunca existió.
+
+  Este memorial es uno de los más recientes en la ciudad de Valdivia. Se
+encuentra ubicado en la actual cárcel del sector de Llancahue. Contó con el apoyo
+de Gendarmería para su construcción, gestionada por la AFDD que permite su 
+concreción. Este memorial busca recordar los enjuiciamientos realizados por la
+Caravana de la Muerte en el territorio cordillerano.
+De acuerdo a los relatos, el 04 de octubre de 1973, son sacados de la Cárcel
+Pública de Valdivia, José Gregorio Liendo Vera, Rudemir Saavedra Bahamondez,
+Víctor Eugenio Rudolph Reyes, Víctor Segundo Valeriano Saavedra Muñoz, Santiago
+Segundo García Morales, Luis Mario Valenzuela Ferrada, Sergio Jaime Bravo Aguilera,
+Luis Hernán Peso Jara, Víctor Fernando Krauss Iturra, Pedro Purísimo Barría Ordoñez,
+Luis Enrique del Carmen Guzmán Soto y a José René Barrientos Warner, a quienes
+se les condujo al predio militar de Llancahue, al polígono de tiro de la Guarnición
+Militar de Valdivia, donde se les fusiló luego de una sentencia pronunciada en un
+Consejo de Guerra. Este memorial denuncia la acción desmedida de la Caravana
+de la Muerte y lo que hizo la dictadura
+<p style="font-style: italic; text-align: right;"> Triptico</p><br>
 
 
- <a href="https://interactivos.museodelamemoria.cl/victimas/?p=280" target="_blank">Pedro Purísimo Barria Ordóñez, 22 años</a>
- <a href="https://interactivos.museodelamemoria.cl/victimas/?p=2340" target="_blank">José René Barrientos Warner, 29 años</a>
- <a href="https://interactivos.museodelamemoria.cl/victimas/?p=2332" target="_blank">Sergio Jaime Bravo Aguilera, 21 años</a>
- <a href="https://interactivos.museodelamemoria.cl/victimas/?p=551" target="_blank">Santiago Segundo Garcia Morales ,26 años</a>
- <a href="https://interactivos.museodelamemoria.cl/victimas/?p=130" target="_blank">José Gregorio Liendo Vera, 28 años</a>
- <a href="https://interactivos.museodelamemoria.cl/victimas/?p=2228" target="_blank">Luis Enrique del Carmen Guzman Soto, 21 años</a>
- <a href="https://interactivos.museodelamemoria.cl/victimas/?p=646" target="_blank">Fernando Krauss Iturra, 24 años</a>
- <a href="https://interactivos.museodelamemoria.cl/victimas/?p=1160" target="_blank">Luis Hernán Pezo Jara, 29 años</a>
- <a href="https://interactivos.museodelamemoria.cl/victimas/?p=2584" target="_blank">Víctor Eugenio Rudolf Reyes, 32 años</a>
- <a href="https://interactivos.museodelamemoria.cl/victimas/?p=1104" target="_blank">Rudemir Saavedra Bahamondes, 29 años</a>
- <a href="https://interactivos.museodelamemoria.cl/victimas/?p=1944" target="_blank">Víctor Segundo Saavedra Muñoz, 19 años</a>
- <a href="https://interactivos.museodelamemoria.cl/victimas/?p=2016" target="_blank">Luis Mario Valenzuela Ferrada, 20 años</a>`)
+
+<p style="font-style: italic;">"Los días 3 y 4 de octubre de 1973, fueron ejecutados en cumplimiento de una
+sentencia del Consejo de Guerra de Valdivia, las siguientes personas, en su
+mayoría militantes del MIR-MCR (Movimiento Campesino Revolucionario),
+todos acusados de asaltar el Retén de Carabineros de Neltume el día 12 de
+septiembre de 1973:
+<br>
+
+
+
+ <br> <a href="https://memoriaviva.com/nuevaweb/detenidos-desaparecidos/desaparecidos-b/barria-ordonez-pedro-purisimo/" target="_blank">Pedro Purísimo Barria Ordóñez, 22 años</a>
+<br> <a href="https://memoriaviva.com/nuevaweb/detenidos-desaparecidos/desaparecidos-b/barrientos-warner-jose-rene/" target="_blank">José René Barrientos Warner, 29 años</a>
+<br><a href="https://memoriaviva.com/nuevaweb/detenidos-desaparecidos/desaparecidos-b/bravo-aguilera-sergio-jaime/" target="_blank">Sergio Jaime Bravo Aguilera, 21 años</a>
+ <br><a href=https://memoriaviva.com/nuevaweb/detenidos-desaparecidos/desaparecidos-b/garcia-morales-santiago-segundo/" target="_blank">Santiago Segundo Garcia Morales ,26 años</a>
+<br> <a href="https://memoriaviva.com/nuevaweb/detenidos-desaparecidos/desaparecidos-b/liendo-vera-jose-gregorio/" target="_blank">José Gregorio Liendo Vera, 28 años</a>
+ <br><a href="https://memoriaviva.com/nuevaweb/detenidos-desaparecidos/desaparecidos-b/guzman-soto-luis-enrique-del-carmen/" target="_blank">Luis Enrique del Carmen Guzman Soto, 21 años</a>
+ <br><a href="https://memoriaviva.com/nuevaweb/detenidos-desaparecidos/desaparecidos-b/krauss-iturra-victor-fernando/" target="_blank">Fernando Krauss Iturra, 24 años</a>
+ <br><a href="https://memoriaviva.com/nuevaweb/detenidos-desaparecidos/desaparecidos-b/pezo-jara-luis-hernan" target="_blank">Luis Hernán Pezo Jara, 29 años</a>
+ <br><a href="https://memoriaviva.com/nuevaweb/detenidos-desaparecidos/desaparecidos-b/rudolf-reyes-victor-eugenio/" target="_blank">Víctor Eugenio Rudolf Reyes, 32 años</a>
+ <br><a href="https://memoriaviva.com/nuevaweb/detenidos-desaparecidos/desaparecidos-b/saavedra-bahamondes-rudemir/" target="_blank">Rudemir Saavedra Bahamondes, 29 años</a>
+ <br><a href="https://memoriaviva.com/nuevaweb/detenidos-desaparecidos/desaparecidos-b/saavedra-munoz-victor-segundo/" target="_blank">Víctor Segundo Saavedra Muñoz, 19 años</a>
+ <br><a href="https://memoriaviva.com/nuevaweb/detenidos-desaparecidos/desaparecidos-b/valenzuela-ferrada-luis-mario/" target="_blank">Luis Mario Valenzuela Ferrada, 20 años</a>
+<br>
+</p>
+<p style="font-style: italic; text-align: right;"> Informe Rettig p389 </p><br>
+
+
+`)
 });
 
    var marker = L.marker([-39.461455, -73.232988],{icon: memorial}).addTo(mapa) ;marker.on('click', function() 
-  {openPanel(`<h3>Memorial de la Mano</h3>
+  {openPanel(`<h3>Memorial de Maiquillahue</h3>
 <h4>
 Recuerda a <a href="https://interactivos.museodelamemoria.cl/victimas/?p=461" target="_blank">José Matías Ñanco Lillo, 60 años</a>
 , ejecutado a sangra fría frente a más de 10 testigos y luego su cuerpo hecho desaparecer por militares el 31 de octubre de 1973.
@@ -1499,7 +1806,7 @@ para dirigirte al retén de Riñinahue.
 });
 
 
- var marker = L.marker([-40.329849, -72.225219],{icon: memorial}).addTo(mapa) ;marker.on('click', function() 
+ var marker = L.marker([-40.195466, -72.043643],{icon: memorial}).addTo(mapa) ;marker.on('click', function() 
   {openPanel(`<h3>Fundo Arquilhue</h3>
 <h4> Ubicado en la precordillera, a casi 300 km. de Valdivia, el fundo “Chihuío”
 sirvió como centro de detención y tortura para las fuerzas represivas de la región.
@@ -1535,9 +1842,149 @@ Balmaceda, allí se encuentra el Retén de Carabineros.
  `)
 });
 
+ var marker = L.marker([-40.323342, -72.210104],{icon: memorial}).addTo(mapa) ;marker.on('click', function() 
+  {openPanel(`<h3>Retén de Riñinahue</h3>
+
+<h4> Este retén se encuentra localizado en la localidad de Riñinahue en la comuna
+de Lago Ranco, y sirvió como centro de detención y tortura para las comunidades
+mapuches que están en el sector.
+El espacio del Retén Riñinahue era muy reducido, ya que abarcaba las instalaciones
+de la empresa hidroeléctrica de Pilmaiquén y la población Endesa, que es donde
+vivía la gente que trabaja en la empresa, que eran más o menos 30 casas.
+La dotación estaba compuesta de 4 o 5 funcionarios, pero antes de 1973 llegaron
+Carabineros de Río Bueno y La Unión a reforzar la custodia por temor a atentados. Una
+noche posterior al 11 de septiembre de 1973, 2 meses después aproximadamente,
+se le ordenó al contingente concurrir a una casa ubicada en el fundo. La casa estaba
+sin luces y al parecer sus moradores estaban durmiendo, los carabineros Zapata y
+Obando tocaron, alguien abrió la puerta y ellos se metieron a la casa y sacaron a una
+persona. El detenido se quejaba y se lamentaba, no se defendió.
+Sigue por la ruta T-85 camino a Llifen. Al tomar la ruta T-559 hacia Rupumeica,
+pasarás por la localidad de Arquilhue, donde aún se aprecian los grandes fundos que
+fueron parte del Complejo Forestal Maderero Panguipulli, por la zona cordillerana, a
+unos 43 kilómetros desde el hito 7.
+ 
+
+<p style="font-style: italic; text-align: right;"> Triptico </p><br>
+ <h4>
+ `)
+});
+
+ var marker = L.marker([-39.800118, -73.244429],{icon: memorial}).addTo(mapa) ;marker.on('click', function() 
+  {openPanel(`<h3>Aerodromo las marías</h3><br>
+
+<h4> <p/ style="font-style: italic;">"El 5 de octubre de 1973 fue muerto en Valdivia, por personal del Ejército, 
+  
+  <a href="https://memoriaviva.com/nuevaweb/ejecutados-politicos/ejecutados-politicos-c/carreno-zuniga-victor-hugo/" target="_blank">Victor Hugo Carreño Zuñiga</a>, 
+, 21 años, estudiante, Presidente Regional de la
+Juventud Socialista.
+La prensa informó que fue muerto, en horas de toque de queda, cuando se arrancó
+de la patrulla militar que lo llevaba detenido. ©
+Se ha acreditado ante esta Comisión que esta persona fue detenida en su
+domicilio, ante testigos, el día 4 de octubre de 1973 por funcionarios del Ejército."</p>
+
+<p style="font-style: italic; text-align: right;"> Informe rettig p390 </p><br>
+
+<br>
+<p style="font-style: italic;">
+En el fallo de primera instancia, el ministro en visita Álvaro Mesa Latorre dio por establecido los siguientes hechos:<br>
+“El día 5 de octubre de 1973, una patrulla integrada por dos oficiales, Marco Augusto Aguirre Mendiboure y Alejandro Héctor Kraemer Pinochet
+ y alrededor de 5 conscriptos, concurren al domicilio de Víctor Carreño Zúñiga, a quien subieron en la parte posterior de una camioneta 
+ Pick Up en la que iban los soldados aludidos y, luego de realizar otros patrullajes, 
+ Carreño Zúñiga, fue llevado hasta el aeropuerto Las Marías  de la ciudad de Valdivia, 
+ lugar donde lo hicieron bajar y el oficial militar Marco Augusto Aguirre Mendiboure le efectuó diversos disparos
+   que causaron la muerte, específicamente como consecuencia heridas a bala corporales múltiples, 
+   transfixiantes complicadas con rotura de órganos, vísceras y esqueleto,
+ disparos que fueron efectuados por terceros con arma de grueso calibre y a corta distancia, siendo posteriormente llevado a la morgue local”.
+ </p>
+<p style="font-style: italic; text-align: right;"> memoria viva </p><br>
+ <h4>
+ `)
+});
+
+ var marker = L.marker([-40.205396, -72.103042],{icon: memorial}).addTo(mapa) ;marker.on('click', function() 
+  {openPanel(`<h3>Siscahue </h3><br>
+
+<h4> <p/ style="font-style: italic;">"El día 7 de octubre de 1973 fue ejecutado por personal del Ejército, 
+  
+<a href="https://memoriaviva.com/nuevaweb/ejecutados-politicos/ejecutados-politicos-s/silva-silva-andres/" target="_blank">Andres Silva Silva</a>
+
+  Andrés
+SILVA SILVA, 33 años, obrero maderero en el Complejo Maderero y Forestal
+Panguipulli.
+El afectado fue detenido en el hogar de sus padres, el día 6 de octubre de 1973,
+por un contingente militar que se lo llevaron a un Fundo del Sector de Nilahue.
+Al día siguiente, los mismos militares lo condujeron a su domicilio y allanaron el
+lugar.  Posteriormente fue ejecutado en el sector denominado Sichahue, y su
+cuerpo sin vida abandonado en un pequeño bosque de ese lugar.  Carabineros de
+Llifén prohibió darle sepultura y los familiares, después de dos meses, decidieron
+inhumarlo, contra las órdenes, en razón de que los perros ya habían destrozado
+completamente el cuerpo.  En la causa tramitada por el Ministro en Visita sobre
+los hechos de Chihuío se exhumaron sus restos.
+"</p>
+
+<p style="font-style: italic; text-align: right;"> Informe rettig p390 </p><br>
+ <h4>
+ `)
+});
+
+
+ var marker = L.marker([-39.832340, -73.201687],{icon: memorial}).addTo(mapa) ;marker.on('click', function() 
+  {openPanel(`<h3>Tenencia de Carabineros Gil de Castro</h3><br>
+
+<h4> <p/ style="font-style: italic;">"EEl 8 de noviembre de 1973, por sentencia del Consejo de Guerra Rol Nº 1572-73
+de Valdivia, fueron ejecutadas las siguientes personas, acusadas de asaltar la
+Tenencia de Carabineros Gil de Castro, de la misma ciudad, el día 13 de
+septiembre de 1973:<br>
+
+<br><a href="https://memoriaviva.com/nuevaweb/ejecutados-politicos/ejecutados-politicos-c/chavez-oyarzun-cosme-ricardo/" target="_blank">Cosme Ricardo Chavez Oyarzun</a> 18 años, obrero pintor;
+<br><a href="https://memoriaviva.com/nuevaweb/ejecutados-politicos/ejecutados-politicos-g/gatica-coronado-victor-joel/" target="_blank">Victor Joel Gatica Coronado</a>, comerciante ambulante
+<br><a href="https://memoriaviva.com/nuevaweb/ejecutados-politicos/ejecutados-politicos-r/romero-corrales-victor-enrique/" target="_blank">Victor Enrique Romero Coralles</a>, 22 años, orbero
+"</p>
+
+<p style="font-style: italic; text-align: right;"> Informe rettig p397 </p><br>
+ <h4>
+ `)
+});
+
+
+
+
+ var marker = L.marker([-39.823737, -72.082169],{icon: memorial}).addTo(mapa) ;marker.on('click', function() 
+  {openPanel(`<h3>Caso molco</h3><br>
+
+<h4> <p/ style="font-style: italic;">"El 23 de diciembre de 1973 fueron ejecutados por carabineros en el sector de
+Molco, Choshuenco, en el Complejo Panguipulli, dos personas:
+
+
+<br><a href="https://memoriaviva.com/nuevaweb/ejecutados-politicos/
+ejecutados-politicos-v/vasquez-martinez-hugo-rivol/" target="_blank">Hugo Rivol Vasquez Martinez</a>
+<br><a href="https://memoriaviva.com/nuevaweb/ejecutados-politicos/
+ejecutados-politicos-s/superby-jeldres-mario-edmundo/" target="_blank">Victor Joel Gatica Coronado</a>
+<br><a href="https://memoriaviva.com/nuevaweb/ejecutados-politicos/
+ejecutados-politicos-r/romero-corrales-victor-enrique/" target="_blank">Victor Enrique Romero Coralles</a>
+
+
+Ambos se encontraban internados en la montaña, en el sector de Choshuenco,
+desde  donde  bajaban  al  pueblo  esporádicamente  a  alimentarse.    Según
+información de prensa de la época, "dos extremistas fueron muertos durante el
+transcurso de un operativo que hicieron a las 23,45 horas funcionarios de
+Choshuenco  al  lugar  denominado  Molco.    En  momentos  que  Carabineros
+patrullaba el sector fueron atacados con disparos de armas por los extremistas,
+repeliendo de inmediato el ataque.  Durante la balacera fue muerto con impactos
+en el tórax Hugo Rivol Vásquez Martínez, 21 años, el que portaba un rifle marca
+Winchester de repetición.  Andaba con otro sujeto apodado "El Braulio", quién
+fue herido en las piernas y mientras era conducido al Hospital de Panguipulli dejó
+de existir en el camino".</p>
+<p style="font-style: italic; text-align: right;"> Informe rettig p398</p><br>
+ <h4>
+ `)
+});
+
+
 </script>
 </body>
 </html>
+
 
 
 
