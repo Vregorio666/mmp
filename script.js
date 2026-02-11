@@ -7,7 +7,7 @@ var mapa = L.map('mapa').setView([-39.95, -72.8], 9);
 var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     minZoom: 0,
     maxZoom: 19,
-    attribution: '&copy; OpenStreetMap</a> contributors'
+    attribution: '&copy; OpenStreetMap contributors'
 });
 osm.addTo(mapa);
 
@@ -3223,6 +3223,7 @@ el deterioro de su salud.
  <h4>
  `)
 });
+
 
 
 
