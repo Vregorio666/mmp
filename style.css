@@ -1,0 +1,385 @@
+
+ /* ESTO ES CSS */
+ 
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* H = fuentes */
+h1 {
+  font-size: 22px;
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: bold;
+  color: rgb(0, 0, 0);
+  text-decoration: underline;
+}
+
+h2 {
+  font-size: 12px;
+  font-family: monospace;
+  font-weight: bold;
+  line-height: 1.8;
+  color: rgb(0, 0, 0);
+  margin: 1px;
+  padding: 1px;
+  text-align: center;
+}
+
+h3 {
+  font-size: 100%;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  color: rgb(0, 0, 0);
+  text-decoration: underline;
+  margin: 1px;
+  padding: 1px;
+}
+
+h4 {
+  font-size: 80%;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  line-height: 1.7;
+  text-align: justify;
+  color: rgb(0, 0, 0);
+}
+
+h5 {
+  font-size: 13px;
+  font-family: Arial, sans-serif;
+
+  font-weight: bold; /* Cambié "light" por 300 */
+  line-height: 0.5; /* Cambié 0 por un valor más razonable */
+  text-align: justify;
+  color: rgb(0, 0, 0)
+}
+
+#mapa {
+  height: 100dvh; 
+  margin: 0;
+  padding: 0;
+}
+
+#info-titulo {
+  position: fixed; /* Cambié a fixed para que siempre esté visible */
+  top: 2%;
+  right: 42%;
+  width: auto;
+  height: auto;
+  max-height: 85%;
+  z-index: 1000;
+}
+
+#info-leyenda {
+  display: flex; 
+  flex-direction: row;
+  align-items: center;  
+  justify-content: flex-start;
+  gap: 3px; /* Reduje el gap para que quepa mejor */
+  flex-wrap: wrap; /* Cambié a wrap por si se necesita en pantallas pequeñas */
+  position: fixed;
+  bottom: 5%; /* Cambié top: 90% por bottom: 5% para mejor control */
+  right: 38%;
+  width: auto;
+  height: auto;
+  border: 2px solid #050101;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 1px 10px;
+  border-radius: 10px;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+}
+
+#info-leyenda .item {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+}
+
+#info-leyenda .item:nth-child(2) {
+  margin-left: 30px; /* Reduje el margen */
+}
+
+
+#info-leyenda img {
+  width: 20px;
+  height: auto;
+}
+
+#info-logo {
+  position: fixed;
+  top: 0%;
+  left: 2%; /* Cambié right por left para mejor posicionamiento */
+  width: 180px;
+  height: auto;
+  max-height: 200px;
+  background: rgba(255, 255, 255, 0);
+  padding: 10px;
+  z-index: 1000;
+}
+
+#info-frase {
+  position: fixed;
+  bottom: 2%; /* Cambié top por bottom */
+  left: 5%;
+  width: 500px;
+  height: auto;
+  z-index: 1000;
+}
+
+#info-panel {
+  position: fixed; /* Cambié a fixed */
+  top: 30px;
+  right: -40%; /* Empieza fuera de la pantalla */
+  width: 35%;
+  max-width: 600px;
+  height: auto;
+  max-height: calc(100vh - 60px); /* Altura dinámica */
+  border: 2px solid #050101;
+  background: white;
+  overflow-y: auto;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3);
+  z-index: 1001;
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#info-panel.open {
+  right: 20px; /* Desliza hacia adentro */
+  opacity: 1;
+}
+
+#info-panel a {
+  color: inherit;
+  text-decoration: underline;
+  transition: color 0.2s;
+}
+
+#info-panel a:hover {
+  color: #1b2734;
+  text-decoration: underline;
+}
+
+#info-anio {
+  position: fixed; /* Cambié a fixed */
+  top: 7%;
+  right: 27%;
+  width: auto;
+  height: auto;
+  z-index: 1000;
+  font-family: 'Source Sans 3', sans-serif;
+  font-weight: bold;
+  font-size: 120%;
+  letter-spacing: 0.08em;
+  opacity: 0.85;
+}
+
+#close-btn {
+  position: absolute;
+  top: 10px; /* Añadí posición top */
+  right: 10px;  
+  cursor: pointer;
+  background: #1b2734;
+  color: white;
+  padding: 5px 10px; /* Corregí el typo "0.5x" */
+  border: none;
+  border-radius: 5px;
+  font-size: 18px;
+  font-weight: bold;
+  transition: background 0.2s;
+  z-index: 10;
+}
+
+#close-btn:hover {
+  background: #2c3e50;
+}
+
+#panel-tabs {
+  position: sticky;
+  bottom: 0;
+  background: white;
+  text-align: center;
+  padding: 10px 0;
+  margin-top: 20px;
+  border-top: 1px solid #eee;
+}
+
+.tab-dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  background: #bbb;
+  border-radius: 50%;
+  margin: 0 5px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.tab-dot:hover {
+  background: #888;
+  transform: scale(1.2);
+}
+
+.tab-dot.active {
+  background: #1b2734;
+  transform: scale(1.3);
+}
+
+.panel-page {
+  display: none;
+  animation: fadeIn 0.3s;
+}
+
+.panel-page.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* PDF */
+.pdf-thumb {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  cursor: pointer;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-top: 10px;
+}
+
+.pdf-thumb iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  pointer-events: none;
+  transform: scale(1.1); /* Zoom para ocultar barras */
+}
+
+.pdf-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 16px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.pdf-thumb:hover .pdf-overlay {
+  opacity: 1;
+}
+
+
+/* Responsive */
+@media (max-width: 768px) {
+  h1 { font-size: 18px; }
+  h2 { font-size: 10px; line-height: 1.4; }
+  h3 { font-size: 14px; }
+  h4, h5 { font-size: 12px; }
+
+  #info-logo {
+    position: fixed;
+    top: 5px;
+    left: 5px;
+    width: 100px;
+    padding: 5px;
+  }
+
+  #info-titulo {
+    top: 10px;
+    right: 10px;
+    left: auto;
+    font-size: 14px;
+  }
+
+  #info-anio {
+    top: 45px;
+    right: 10px;
+    font-size: 100%;
+  }
+
+  #info-frase {
+    display: none; /* Oculto en móvil para no saturar */
+  }
+
+  #info-leyenda {
+    flex-direction: row;
+    gap: 5px;
+    bottom: 10px;
+    right: 5px;
+    left: 5px;
+    padding: 5px;
+    font-size: 11px;
+  }
+
+  #info-leyenda .item {
+    gap: 5px;
+  }
+
+  #info-leyenda .item:nth-child(2) {
+    margin-left: 10px;
+  }
+
+  #info-leyenda img {
+    width: 16px;
+  }
+
+  /* Ocultar PDF en leyenda en móvil */
+  #info-leyenda .pdf-thumb {
+    display: none;
+  }
+
+  #info-panel {
+    width: 100%;
+    right: -100%;
+    left: auto;
+    top: 0;
+    max-height: 100vh;
+    height: 100vh;
+    border-radius: 0;
+    padding: 15px;
+    padding-top: 50px; /* Espacio para el botón de cerrar */
+  }
+
+  #info-panel.open {
+    right: 0;
+  }
+
+  #close-btn {
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    padding: 8px 12px;
+  }
+
+  #panel-tabs {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    padding: 15px 0;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+  }
+
+  .pdf-thumb {
+    height: 300px;
+  }
+}
