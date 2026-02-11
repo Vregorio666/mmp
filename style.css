@@ -14,6 +14,16 @@ h1 {
   font-weight: bold;
   color: rgb(0, 0, 0);
   text-decoration: underline;
+  text-align: center;
+}
+
+h6 {
+  font-size: 18px;
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: bold;
+  color: rgb(0, 0, 0);
+  text-decoration: underline;
+  text-align: center;
 }
 
 h2 {
@@ -62,33 +72,64 @@ h5 {
   padding: 0;
 }
 
+/* TÍTULOS - Centrados horizontalmente */
 #info-titulo {
-  position: fixed; /* Cambié a fixed para que siempre esté visible */
+  position: fixed;
   top: 2%;
-  right: 42%;
+  left: 50%;
+  transform: translateX(-50%); /* Centra perfectamente */
   width: auto;
-  height: auto;
-  max-height: 85%;
+  max-width: 90%; /* Evita desbordamiento */
   z-index: 1000;
+  text-align: center;
 }
 
+#info-subtitulo {
+  position: fixed;
+  top: 2%; /* Debajo del título principal */
+  left: 50%;
+  transform: translateX(-50%);
+  width: auto;
+  max-width: 90%;
+  z-index: 1000;
+  text-align: center;
+}
+
+/* AÑO - Centrado */
+#info-anio {
+  position: fixed;
+  top: 12%; /* Debajo del subtítulo */
+  left: 50%;
+  transform: translateX(-50%);
+  width: auto;
+  z-index: 1000;
+  font-family: 'Source Sans 3', sans-serif;
+  font-weight: bold;
+  font-size: 120%;
+  letter-spacing: 0.08em;
+  opacity: 0.85;
+  text-align: center;
+}
+
+/* LEYENDA - Centrada abajo */
 #info-leyenda {
   display: flex; 
   flex-direction: row;
   align-items: center;  
-  justify-content: flex-start;
-  gap: 3px; /* Reduje el gap para que quepa mejor */
-  flex-wrap: wrap; /* Cambié a wrap por si se necesita en pantallas pequeñas */
+  justify-content: center; /* Centrado horizontal */
+  gap: 10px;
+  flex-wrap: wrap;
   position: fixed;
-  bottom: 5%; /* Cambié top: 90% por bottom: 5% para mejor control */
-  right: 38%;
+  bottom: 20px; /* Distancia fija desde abajo */
+  left: 50%;
+  transform: translateX(-50%); /* Centra perfectamente */
   width: auto;
-  height: auto;
+  max-width: 90%;
   border: 2px solid #050101;
-  background: rgba(255, 255, 255, 0.95);
-  padding: 1px 10px;
+  background: rgba(255, 255, 255, 0.8); 
+  padding: 8px 20px;
   border-radius: 10px;
-  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
   z-index: 1000;
 }
 
@@ -96,24 +137,24 @@ h5 {
   display: inline-flex;
   flex-direction: row;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   white-space: nowrap;
 }
 
 #info-leyenda .item:nth-child(2) {
-  margin-left: 30px; /* Reduje el margen */
+  margin-left: 20px;
 }
-
 
 #info-leyenda img {
   width: 20px;
   height: auto;
 }
 
+/* LOGO - Esquina superior izquierda */
 #info-logo {
   position: fixed;
-  top: 0%;
-  left: 2%; /* Cambié right por left para mejor posicionamiento */
+  top: 10px;
+  left: 10px; /* Posición fija en píxeles */
   width: 180px;
   height: auto;
   max-height: 200px;
@@ -122,23 +163,27 @@ h5 {
   z-index: 1000;
 }
 
+/* FRASE - Esquina inferior izquierda */
 #info-frase {
   position: fixed;
-  bottom: 2%; /* Cambié top por bottom */
-  left: 5%;
-  width: 500px;
+  bottom: 20px; /* Distancia fija desde abajo */
+  left: 50px; /* Distancia fija desde la izquierda */
+  width: auto;
+  max-width: 500px; /* Ancho máximo */
   height: auto;
   z-index: 1000;
 }
 
+/* PANEL - Lado derecho */
 #info-panel {
-  position: fixed; /* Cambié a fixed */
+  position: fixed;
   top: 30px;
-  right: -40%; /* Empieza fuera de la pantalla */
+  right: -40%;
   width: 35%;
   max-width: 600px;
+  min-width: 320px; /* Ancho mínimo */
   height: auto;
-  max-height: calc(100vh - 60px); /* Altura dinámica */
+  max-height: calc(100vh - 10%);
   border: 2px solid #050101;
   background: white;
   overflow-y: auto;
@@ -151,10 +196,102 @@ h5 {
 }
 
 #info-panel.open {
-  right: 20px; /* Desliza hacia adentro */
+  right: 20px;
   opacity: 1;
 }
 
+/* Responsive */
+@media (max-width: 1200px) {
+  #info-titulo {
+    font-size: 18px;
+  }
+  
+  #info-frase {
+    max-width: 300px;
+    font-size: 12px;
+  }
+  
+  #info-leyenda {
+    padding: 5px 15px;
+    gap: 8px;
+  }
+}
+
+@media (max-width: 768px) {
+  h1 { font-size: 16px; }
+  h2 { font-size: 10px; line-height: 1.4; }
+  h3 { font-size: 14px; }
+  h4, h5 { font-size: 12px; }
+
+  #info-logo {
+    top: 5px;
+    left: 5px;
+    width: 80px;
+    padding: 5px;
+  }
+
+  #info-titulo {
+    top: 5px;
+    font-size: 14px;
+    max-width: 70%; /* Espacio para el logo */
+  }
+
+  #info-subtitulo {
+    top: 50px;
+    font-size: 12px;
+  }
+
+  #info-anio {
+    top: 80px;
+    font-size: 90%;
+  }
+
+  #info-frase {
+    display: none;
+  }
+
+  #info-leyenda {
+    bottom: 10px;
+    padding: 5px 10px;
+    font-size: 10px;
+    max-width: 95%;
+  }
+
+  #info-leyenda .item {
+    gap: 5px;
+  }
+
+  #info-leyenda .item:nth-child(2) {
+    margin-left: 10px;
+  }
+
+  #info-leyenda img {
+    width: 16px;
+  }
+
+  #info-panel {
+    width: 100%;
+    right: -100%;
+    max-width: none;
+    top: 0;
+    max-height: 100vh;
+    height: 100vh;
+    border-radius: 0;
+    padding: 15px;
+    padding-top: 50px;
+  }
+
+  #info-panel.open {
+    right: 0;
+  }
+
+  #close-btn {
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    padding: 8px 12px;
+  }
+}
 #info-panel a {
   color: inherit;
   text-decoration: underline;
