@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MEMORIA</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>    
+    <link rel="stylesheet" href="style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  
+    <div id="mapa"></div>
+    
+    <div id="info-titulo">
+        <h1>Mapa de la Memoria</h1>
+        <div id="info-anio"></div>
+    </div>
+    
+    <div id="info-logo">
+        <img src="./Casa_memoria.png" alt="Casa de la Memoria" style="width:100%; border-radius:8px; margin-top:10px;">
+    </div>
+    
+    <div id="info-frase">
+        <h2>"Es vital entender que ellos no son solo una fotografía en una pancarta: eran seres humanos,
+        personas sensibles, de carne y hueso, como usted, como yo, que tenían hermosos sueños y por eso fueron considerados peligrosos.
+        <br><p style="padding-top: 0;">¿Era neccesario para los que detentan el poder hacerlos desaparecer como si nunca hubieran existido?"</p>
+        <p style="text-align: right;">- Ana González de Recabarren</p></h2>
+    </div>
+    
+    <div id="info-leyenda">
+        <div class="item">
+            <img src="./clavel.png" alt="Memorial"> 
+            <span><h5>Sitio de Memoria</h5></span>
+        </div>  
+        <div class="item">
+            <img src="./detenido.png" alt="Centro de detención">
+            <span><h5>Centro de detención</h5></span>
+        </div>
+    </div>
+
+    <div id="info-panel">
+        <button id="close-btn">x</button>
+        
+        <!-- Contenido -->
+        <div id="page1" class="panel-page active">
+            <div id="info-content"></div>
+        </div>
+        <div id="page2" class="panel-page">
+            <div id="extra-content"></div>
+        </div>
+        <div id="page3" class="panel-page">
+            <div id="third-content"></div>
+        </div>
+        <div id="page4" class="panel-page">
+            <div id="fourth-content"></div>
+        </div>
+
+        <div id="panel-tabs">
+            <span class="tab-dot active" data-tab="page1"></span>
+            <span class="tab-dot" data-tab="page2"></span>
+            <span class="tab-dot" data-tab="page3"></span>
+            <span class="tab-dot" data-tab="page4"></span>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
